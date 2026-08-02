@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="generator" content="pandoc" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
-  <title>第三课 · 如何正确采集信息</title>
+  <title>专题课 A2 · 扩展插件：拆透 fund-review，学会写自己的</title>
   <style>
     html {
       color: #1a1a1a;
@@ -243,187 +243,133 @@ img { max-width: 100%; border-radius: 6px; }
 </head>
 <body>
 <header id="title-block-header">
-<h1 class="title">第三课 · 如何正确采集信息</h1>
+<h1 class="title">专题课 A2 · 扩展插件：拆透
+fund-review，学会写自己的</h1>
 </header>
-<h1 id="第三课-如何正确采集信息">第三课 · 如何正确采集信息</h1>
+<h1 id="专题课-a2-扩展插件拆透-fund-review学会写自己的">专题课 A2 ·
+扩展插件：拆透 fund-review，学会写自己的</h1>
 <blockquote>
-<p><strong>学习版说明</strong>：这是唯一一个”错了之后无法在下游补救”的环节。环境装错了能重装，域切错了能返工，但信息在源头丢了、歪了，后面每一步都在错误的地基上精雕细琢——<strong>而且没人知道它曾经存在过</strong>。</p>
+<p><strong>学习版说明</strong>：四级台阶的第三级——写自己的插件。教材是一个真实的垂直插件
+<code>fund-review</code>（采购报价优化，54
+个文件）全仓读码。它证明的不是”这个插件多厉害”，是”<strong>这套工具链能造出这种量级的东西</strong>”——它就是你的未来样本。</p>
 </blockquote>
 <h2 id="学习目标">学习目标</h2>
 <ul class="task-list">
+<li><label><input type="checkbox" />说清一个插件的骨架（Plugin
+Structure）由哪几类文件构成</label></li>
 <li><label><input
-type="checkbox" />画出信息衰减链，说清每个工具防的是哪一道衰减</label></li>
+type="checkbox" />理解”红蓝对抗”设计，以及最见功力的一处细节</label></li>
 <li><label><input
-type="checkbox" />区分”全”和”准”两个标准，知道为什么”不准”更危险</label></li>
-<li><label><input
-type="checkbox" />会用两类模板（A/B），并产出一份三层齐全的
-<code>_INPUT.md</code> 输入包</label></li>
+type="checkbox" /><strong>掌握可迁移判据：这一步能不能写成脚本？能，就别交给模型</strong></label></li>
+<li><label><input type="checkbox" />理解 Plugin Traits
+是”观察”不是”配置”</label></li>
 </ul>
-<h2 id="一信息衰减链本课的总地图">一、信息衰减链（本课的总地图）</h2>
-<pre><code>客户脑子里的 → 客户说出来的 → 你听到的 → 你记下来的 → 你写进模板的 → 智能体读到的
-   ①隐含前提    ②表述能力     ③注意力      ④转译损失     ⑤结构化损失    ⑥理解偏差</code></pre>
-<p><strong>六道衰减。本课的每一个工具，都是在其中某一道上设的保真措施。</strong></p>
+<h2 id="一fund-review-是什么">一、fund-review 是什么</h2>
+<p>一个”Vertical Plugin”（垂直插件）：针对一类具体业务（报价优化 +
+预审），包含 <strong>38 个脚本（其中 12 个扫描器）、4 个 skill、2 个
+agent、4 个命令、5 个参考文件</strong>。四个 skill 串成一条流水线：解析
+→ 扫描 → 研判 → 出报告。</p>
+<h2 id="二-红蓝对抗两个站在对立面的-agent">二、⭐
+红蓝对抗（两个站在对立面的 agent）</h2>
+<p>一个 agent
+负责”优化报价”，另一个负责”预审挑刺”——同一批材料，立场对立。</p>
+<p><strong>⭐⭐ 最见功力的一处：两个 agent 都没有 Write
+权限。</strong></p>
 <blockquote>
-<p><strong>难听话</strong>：交付失败十有八九不是败在建模或写作，是败在<strong>第一次和客户谈完之后，你以为你听懂了</strong>。</p>
+<p><strong>好的角色设计不是靠嘱咐”你别乱改”，是让它想改也改不了。</strong>（又是”权限即职责”：第二课工具权限、S3
+校验器无权改代码，这里是第三次出现同一条思想。）</p>
 </blockquote>
-<h2 id="二两个标准全-准">二、两个标准：全 ≠ 准</h2>
+<p>什么时候值得设红蓝：<strong>当一件事有明确的对立立场，而且两边都有专业性的时候。</strong></p>
+<h2 id="三-但红蓝对抗不是这个插件的重点">三、⭐⭐
+但红蓝对抗不是这个插件的重点</h2>
+<p>数一下构成就会发现：<strong>38 个脚本 vs 2 个
+agent——这个插件的主体是确定性代码，不是大模型。</strong></p>
+<h3 id="个扫描器都在扫什么举例">12 个扫描器都在扫什么（举例）</h3>
 <table>
-<colgroup>
-<col style="width: 25%" />
-<col style="width: 25%" />
-<col style="width: 25%" />
-<col style="width: 25%" />
-</colgroup>
 <thead>
 <tr class="header">
-<th>标准</th>
-<th>定义</th>
-<th>靠什么保证</th>
-<th>失败长什么样</th>
+<th>扫描器</th>
+<th>扫什么</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td><strong>全</strong></td>
-<td>该问的都问了</td>
-<td>checklist（覆盖度）</td>
-<td>后面突然冒出一个没人考虑过的约束</td>
+<td><code>scan_redundancy</code></td>
+<td>跨工作簿/sheet 的重复内容</td>
 </tr>
 <tr class="even">
-<td><strong>准</strong></td>
-<td>客户原话没被你的转译污染</td>
-<td>原话留存（保真度）</td>
-<td>所有推导都建立在你的误解上，<strong>而且看起来很自洽</strong></td>
+<td><code>scan_caps</code></td>
+<td>比例守恒（标准里的硬上限）</td>
+</tr>
+<tr class="odd">
+<td><code>scan_completeness</code></td>
+<td>9 大费用科目缺失情况</td>
+</tr>
+<tr class="even">
+<td><code>scan_brand_models</code></td>
+<td>设备品牌型号 ≥3（硬要求）</td>
+</tr>
+<tr class="odd">
+<td><code>scan_evidence</code></td>
+<td>取值依据</td>
 </tr>
 </tbody>
 </table>
-<p>⭐ <strong>不准比不全更危险：漏了会暴露，歪了不会。</strong>
-漏掉的东西迟早会撞出来；理解歪了的东西，会一路顺畅地长成一整套自洽的错误方案——直到评审那天才爆。</p>
-<h2
-id="三六个工具每个对应衰减链上的一环">三、六个工具（每个对应衰减链上的一环）</h2>
-<h3 id="工具①-电梯演讲防你以为你懂了">工具① ·
-电梯演讲（防”你以为你懂了”）</h3>
-<p>30
-秒四句话说清这个项目。<strong>判据不是”说得好听”，是邻组能不能复述回来。</strong>
-客户皱眉 = 你当场就发现了偏差，而不是三周后。</p>
-<h3 id="工具②-5w2h-覆盖-checklist保全">工具② · 5W2H 覆盖
-checklist（保”全”）</h3>
-<p>Who / What / When / Where / Why / How / How
-much——<strong>七项缺一，就是”不全”</strong>。答不上来的项标”待客户确认”，最怕的是缺项而不自知。</p>
-<h3 id="工具③-利益相关者地图保全里最容易漏的一块">工具③ ·
-利益相关者地图（保”全”里最容易漏的一块）</h3>
-<p>四栏：谁出钱 / 谁使用 / 谁验收 /
-<strong>谁反对</strong>。“谁反对”必须问——把反对者提前识别出来，等于在流程里提前设了一道闸。</p>
-<h3 id="工具④-原话留存保准">工具④ · 原话留存（保”准”）</h3>
-<p>客户的原话进”事实层”，<strong>你的转译不许混进去</strong>。“用户需要土壤检测功能”是你的转译；用户原话可能是”地里该不该浇水，我心里没底”——里面的约束完全不同。</p>
-<h3 id="工具⑤-两类模板先判用哪类">工具⑤ · 两类模板（先判用哪类）</h3>
+<p>⭐ <strong>每一条都是”照规则一查就知道”的事</strong>——品牌型号够不够
+3
+个、比例有没有超上限、科目缺了哪个。<strong>这些交给脚本，因为它们不需要判断。</strong></p>
+<h3 id="那-agent-干什么">那 agent 干什么</h3>
 <table>
-<colgroup>
-<col style="width: 33%" />
-<col style="width: 33%" />
-<col style="width: 33%" />
-</colgroup>
 <thead>
 <tr class="header">
-<th></th>
-<th>模板 A · 平台立项型</th>
-<th>模板 B · 大模型能力型</th>
+<th>交给确定性脚本</th>
+<th>才交给 agent</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td>适用</td>
-<td>有运营盘的平台项目（→ 多半模式二）</td>
-<td>大模型能力/应用类（→ 多半模式一）</td>
+<td>12 类扫描、解析表格、公式引擎</td>
+<td>从一堆发现里<strong>挑出真正值得提的</strong></td>
 </tr>
 <tr class="even">
-<td>结构</td>
-<td>六段：概览 / 角色 / 价值 / 商业模式 / 拓展 / 名称</td>
-<td>定位 / 用户及场景 / 数据需求 / 能力边界等</td>
+<td>重写表格、生成报告</td>
+<td><strong>排优先级</strong>、用标准条款解释为什么</td>
 </tr>
 </tbody>
 </table>
-<p><strong>最常见的判断错误：只写 B 不写 A。</strong>
-角色只列”用户”“管理员”是软件角色不是业务角色，画像必然空洞。价值写”提升效率、降低成本”
-= 不可量化 = 财务测算那步直接断链。</p>
-<p>⚠️ <strong>复用模板的红线（反例
-B-11）</strong>：有项目把另一个模板的数字整段带过来——模板结构可以复用，<strong>数字不可以</strong>。数字无主
-= 编造，<strong>比空缺更有害</strong>，这是结课路演的一票警示。</p>
-<h3 id="工具⑥-_input.md-输入包本课落点">工具⑥ · <code>_INPUT.md</code>
-输入包（本课落点 ⭐）</h3>
-<p>把采集到的一切压成三层，第四课直接喂给智能体：</p>
-<pre><code>① 事实层：客户原话摘录（不加工）
-② 口径层：术语表 · 关键数字（唯一真相源，下游一律引用不重算）· 禁用词 · 成熟度标注
-③ 任务层：要做什么 · 产出格式 · 不许做什么（必须有禁令）</code></pre>
-<p><strong>只有事实层 = 只完成了三分之一。</strong>
-口径层缺了，第四课跑出来的画像会空洞、术语每次都不一样；任务层没禁令，智能体就会自由发挥。</p>
-<h3 id="渐进式披露资料别一次全塞">⭐ 渐进式披露：资料别一次全塞</h3>
-<p>采集来的资料不是越多越好地塞进上下文。上下文是有限的注意力预算，<strong>全塞进去的后果</strong>：关键信息被淹没、模型注意力稀释、无关内容互相污染、成本白白翻倍。</p>
-<p>按”使用频率”分三档：</p>
-<table>
-<colgroup>
-<col style="width: 33%" />
-<col style="width: 33%" />
-<col style="width: 33%" />
-</colgroup>
-<thead>
-<tr class="header">
-<th>档位</th>
-<th>放法</th>
-<th>放什么</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td><strong>常驻内联</strong></td>
-<td>直接写进 prompt / <code>_INPUT.md</code></td>
-<td>每次任务都要看的：口径、禁令、核心事实</td>
-</tr>
-<tr class="even">
-<td><strong>索引指针</strong></td>
-<td>只放路径 + 一句”它能回答什么”</td>
-<td>可能要看的：参考文档、历史纪要、映射表</td>
-</tr>
-<tr class="odd">
-<td><strong>备查留名</strong></td>
-<td>只登记存在，不进上下文</td>
-<td>极少看的：原始录音、全套附件</td>
-</tr>
-</tbody>
-</table>
-<p><strong>判据一句话：这份资料是”每次都要看”还是”可能要看”？</strong>
-每次都要看 → 内联；可能要看 → 索引。</p>
-<p><strong>索引的灵魂是每份资料配一句”它能回答什么”。</strong>
-只写路径不写用途的索引等于没有索引——模型不知道何时该去读它。<strong>索引质量决定渐进式披露的成败。</strong></p>
-<h2 id="四checkout-关键项">四、checkout 关键项</h2>
-<ul class="task-list">
-<li><label><input type="checkbox" />模板选型说得出理由（A / B /
-A+B）</label></li>
-<li><label><input type="checkbox" />价值段至少 1
-处带数字（时间/人力/金额），且<strong>每个数字能答”是谁的、从哪来”</strong></label></li>
-<li><label><input
-type="checkbox" />输入包三层齐全，任务层有”不许做什么”</label></li>
-<li><label><input type="checkbox" />每类用户的典型提问 ≥10
-条，且是原话不是转译</label></li>
-<li><label><input
-type="checkbox" />拿不准的地方标”待客户确认”，没有把猜测写成客户需求</label></li>
-</ul>
 <blockquote>
-<p>你说不清”谁在什么时候因为什么做了什么动作”、也列不出”他会怎么问”，<strong>就还没有项目，只有一个愿望。别把愿望丢给智能体，它会很客气地帮你把愿望写成
-100 页。</strong></p>
+<p><strong>这就是”确定性优先”在插件层的活体：扫描是确定的，判断才是模型的。</strong></p>
 </blockquote>
+<h3 id="给你的可迁移判据做任何-ai-应用都成立">⭐
+给你的可迁移判据（做任何 AI 应用都成立）</h3>
+<blockquote>
+<h3
+id="这一步能不能写成脚本能就别交给模型"><strong>这一步能不能写成脚本？能，就别交给模型。</strong></h3>
+</blockquote>
+<p>三个理由：① <strong>确定性</strong>——脚本每次结果一样，模型不保证；②
+<strong>可测</strong>——脚本能写单测，提示词不能；③
+<strong>成本</strong>——脚本跑一万次成本不变，agent
+跑一万次付一万次的钱。<strong>模型是用来处理”规则说不清但人能判断”那一段的，不是用来做你懒得写的计算。</strong></p>
+<h2 id="四插件的骨架plugin-structure">四、插件的骨架（Plugin
+Structure）</h2>
+<p>一个插件 = <code>commands/</code>（命令）+
+<code>skills/</code>（技能，含 SKILL.md）+
+<code>agents/</code>（运行时专家）+ <code>scripts/</code>（确定性脚本）+
+<code>references/</code>（按需展开的资料）+ 清单文件。</p>
+<p><strong>Plugin Traits 是观察，不是配置</strong>：你不”配置”
+trait——工具从你已经写下的东西里<strong>推断</strong>出来。比如
+<code>expert-scoped</code> 这个 trait，就是”发现期专家”（A1
+那种）和”运行时专家”（跟着插件跑在真实业务里的）的分界。</p>
 <h2 id="自测">自测</h2>
 <ol type="1">
-<li>为什么”不准”比”不全”更危险？（漏了会暴露，歪了会自洽地长到最后）</li>
-<li>利益相关者地图最容易漏哪一栏？（谁反对）</li>
-<li>输入包哪三层？缺口径层会怎样？</li>
-<li>B-11 反例错在哪？（复用模板时把数字一起带过来 = 编造）</li>
-<li>渐进式披露的三档怎么分？索引的灵魂是什么？（按使用频率分常驻内联/索引指针/备查留名；每份资料配一句”它能回答什么”）</li>
+<li>fund-review 里脚本和 agent 各承担什么？背后的判据是什么？</li>
+<li>红蓝对抗最见功力的设计是什么？（两个 agent 都没有 Write）</li>
+<li>Plugin Traits 为什么说”是观察不是配置”？</li>
 </ol>
 <hr />
 <p><em>完整版见 <a
-href="https://finger999999.github.io/fde-course/课程/L3_如何正确采集信息.html">FDE
-课程中心 · L3</a></em></p>
+href="https://finger999999.github.io/fde-course/课程/A2_扩展插件.html">FDE
+课程中心 · A2</a></em></p>
 
 <script>
 (function () {

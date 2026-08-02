@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="generator" content="pandoc" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
-  <title>专题课 S2 · 本体引擎的工程实现</title>
+  <title>专题课 A1 · 自定义智能体：让工具懂你这一行</title>
   <style>
     html {
       color: #1a1a1a;
@@ -243,227 +243,190 @@ img { max-width: 100%; border-radius: 6px; }
 </head>
 <body>
 <header id="title-block-header">
-<h1 class="title">专题课 S2 · 本体引擎的工程实现</h1>
+<h1 class="title">专题课 A1 · 自定义智能体：让工具懂你这一行</h1>
 </header>
-<h1 id="专题课-s2-本体引擎的工程实现">专题课 S2 ·
-本体引擎的工程实现</h1>
+<h1 id="专题课-a1-自定义智能体让工具懂你这一行">专题课 A1 ·
+自定义智能体：让工具懂你这一行</h1>
 <blockquote>
-<p><strong>学习版说明</strong>：内核怎么造。教材就是
-<code>clife-onto-engine</code>
-的源码和架构图本身——图上每个块都标了文件名，看不懂的地方打开代码。只上
-S1 不上 S2，你能判断一个本体方案好不好，但说不出”好在哪一行”。</p>
+<p><strong>学习版说明</strong>：A 系列是”工具链线”——讲 Astra Studio
+这套工具本身怎么改、怎么扩、怎么回贡（S
+系列是”本体线”）。本课是入门：<strong>不改一行代码，加一个
+<code>.md</code> 文件</strong>，让工具里多一个懂你行业的专家。</p>
 </blockquote>
 <h2 id="学习目标">学习目标</h2>
 <ul class="task-list">
 <li><label><input
-type="checkbox" />用”判缝准则”判断一段代码该放内核、插件还是租户</label></li>
-<li><label><input type="checkbox" />复述 Action
-引擎六步和三条内核铁律</label></li>
-<li><label><input type="checkbox" />说清 SPI
-七槽位的正确用法（验收清单，不是自动化承诺）</label></li>
-<li><label><input type="checkbox" />知道两个 CI
-门禁各守什么</label></li>
+type="checkbox" />说出四级台阶，知道自定义专家放哪、和内置冲突时谁赢</label></li>
+<li><label><input
+type="checkbox" />复述动态专家发现五步，指出”覆盖”发生在哪一步</label></li>
+<li><label><input
+type="checkbox" />理解”专家是复核者不是生成者”，以及这决定了你该写什么</label></li>
+<li><label><input
+type="checkbox" />掌握”该造/不该造”的判据，警惕静默失效</label></li>
 </ul>
-<h2 id="题眼全课最重要的一句话">题眼（全课最重要的一句话）</h2>
+<h2 id="一四级台阶你在哪一级">一、四级台阶：你在哪一级</h2>
+<table>
+<thead>
+<tr class="header">
+<th>级</th>
+<th>动作</th>
+<th>对应</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>一级</td>
+<td>用内置角色（产品经理、架构师……）</td>
+<td>L3/L4/L5，绝大多数人停在这</td>
+</tr>
+<tr class="even">
+<td><strong>二级</strong></td>
+<td><strong>自定义专家——不改代码，加一个 <code>.md</code>
+文件</strong></td>
+<td><strong>← 本课</strong></td>
+</tr>
+<tr class="odd">
+<td>三级</td>
+<td>写自己的插件</td>
+<td>A2</td>
+</tr>
+<tr class="even">
+<td>四级</td>
+<td>回贡上游</td>
+<td>A3</td>
+</tr>
+</tbody>
+</table>
 <blockquote>
-<p><strong>确定性边界置于模型之外：合法但违规的动作，在写后规则校验阶段被确定性回滚并留审计。</strong></p>
+<p><strong>二级性价比高得离谱</strong>：一个 <code>.md</code>
+文件，不改代码、不发版，跟着 git 走、全团队共享。
+<strong>工具不改造，你就只能做它预设的那类项目。</strong></p>
 </blockquote>
-<p>这句话回答了客户真正担心的问题：“AI
-会不会绕过你们的规则？”——<strong>答案是：它绕不过，因为边界不在它里面。</strong></p>
-<h2 id="一三层切分与判缝准则">一、三层切分与判缝准则</h2>
-<table>
-<colgroup>
-<col style="width: 33%" />
-<col style="width: 33%" />
-<col style="width: 33%" />
-</colgroup>
-<thead>
-<tr class="header">
-<th>层</th>
-<th>含行业词</th>
-<th>内容</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td><strong>Kernel 内核</strong>（机制）</td>
-<td><strong>禁止</strong>（CI 脚本强制）</td>
-<td>元模型、Action 内核、规则引擎、回滚、审计、置信度</td>
-</tr>
-<tr class="even">
-<td><strong>Plugin 插件</strong>（策略）</td>
-<td>是（隔离在插件内）</td>
-<td>五要素 Schema、映射、规则函数、Action handler、Agent、CQ</td>
-</tr>
-<tr class="odd">
-<td><strong>Tenant 租户</strong>（实例）</td>
-<td>是（实例数据）</td>
-<td>物理映射、实例数据接入、密级授权</td>
-</tr>
-</tbody>
-</table>
-<p>内核与插件<strong>只通过 SDK
-通信——目录边界即红线</strong>。“本体即基础设施”：内核只懂本体怎么运转，<strong>不懂任何行业</strong>。</p>
-<p><strong>⭐
-判缝准则</strong>：拿一段代码问——“<strong>换成另一个行业（比如医疗），这段还成立吗？</strong>”成立
-→ 内核；不成立 → 插件；涉及具体数字 → 租户。</p>
-<h2 id="二-action-引擎治理写的唯一通路">二、⭐ Action
-引擎：治理写的唯一通路</h2>
-<h3 id="六步">六步</h3>
-<pre><code>1 guard 前置校验（参数 + 用户上下文 + 角色权限，不碰数据）
-2 validate 预演（可选，跑全套但永不落库）
-3 写入 overlay —— 写即可见
-4 写后规则校验 —— declarative + function 两层，收集全部违反
-5a 全过     → 异步 flush + 同事务落审计快照 + 副作用编排
-5b 任一 hard 违反 → 确定性回滚 + 返回结构化拒绝</code></pre>
-<h3 id="三条内核铁律">三条内核铁律</h3>
-<ol type="1">
-<li><strong>写后判</strong>：先写（到 overlay）再校验——操作系统的
-syscall
-校验的是”调用”，本体引擎校验的是”<strong>世界</strong>”（写完之后所有规则还成不成立）</li>
-<li><strong>判全部</strong>：收集全部违反，不是遇到第一个就短路</li>
-<li><strong>拒绝是数据</strong>：连”没权限”都返回结构化的 Violation
-而不是抛异常——<strong>在这个内核里，“拒绝”是一等公民的返回值</strong></li>
-</ol>
-<h3 id="action-普通-tool-calling">Action ≠ 普通 tool calling</h3>
-<table>
-<colgroup>
-<col style="width: 33%" />
-<col style="width: 33%" />
-<col style="width: 33%" />
-</colgroup>
-<thead>
-<tr class="header">
-<th></th>
-<th>普通 tool calling</th>
-<th><strong>Action</strong></th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>谁决定成不成立</td>
-<td>模型决定调什么就执行什么</td>
-<td><strong>模型只能”申请”，引擎决定成不成立</strong></td>
-</tr>
-<tr class="even">
-<td>失败长什么样</td>
-<td>异常 / 一句报错文本</td>
-<td><strong>结构化拒绝</strong></td>
-</tr>
-<tr class="odd">
-<td>留痕</td>
-<td>看实现心情</td>
-<td><strong>强制审计快照（成功和被拒都有）</strong></td>
-</tr>
-</tbody>
-</table>
-<p><strong>一句可以拿去用的话术</strong>：客户问”你们的 AI
-会不会乱改数据”——<strong>“Agent
-只能申请，引擎决定。而且它申请的每一次，无论成败都有快照。”</strong></p>
-<h3 id="validate-预演给谁用跑全套但永不落库">validate
-预演给谁用（跑全套但永不落库）</h3>
-<ul>
-<li><strong>前端</strong>：让用户在点提交之前就看到”这么填会被拒”</li>
-<li><strong>Agent</strong>：先试一次，避免拿真实拒绝当学习信号</li>
-<li><strong>FDE</strong>：调规则时不用反复清数据</li>
-</ul>
-<h2 id="三spi-七槽位接一个新行业要交的七样">三、SPI
-七槽位：接一个新行业要交的七样</h2>
-<p>插件接口（SPI）定义了七样东西，<strong>但注意：实测编译产物只覆盖其中五格</strong>（两格完全不生成，两格只出骨架，一格格式不匹配）。</p>
-<blockquote>
-<p><strong>七槽位的正确用法：它是验收清单</strong>（插件齐不齐，照这七格逐个点）<strong>，不是自动化承诺。</strong>
-这张表本身就是”别信文档，去看代码”的活教材。</p>
-</blockquote>
-<h2 id="四ci-两个门禁守住换行业零改内核">四、CI
-两个门禁：守住”换行业零改内核”</h2>
-<table>
-<colgroup>
-<col style="width: 33%" />
-<col style="width: 33%" />
-<col style="width: 33%" />
-</colgroup>
-<thead>
-<tr class="header">
-<th>门禁</th>
-<th>执法方向</th>
-<th>一句话</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td><code>check_kernel_purity.py</code></td>
-<td><strong>反向</strong>：内核源码禁止出现任何行业词</td>
-<td><strong>一个二十行的脚本，守住了整个产品的可复用性</strong></td>
-</tr>
-<tr class="even">
-<td><code>check_plugin_capabilities.py</code></td>
-<td><strong>正向</strong>：插件声明的能力与实现必须对齐</td>
-<td>防止插件声称能做实际没做的事</td>
-</tr>
-</tbody>
-</table>
-<h3 id="可以脱离本引擎复用的一条方法论">⭐
-可以脱离本引擎复用的一条方法论</h3>
-<p><strong>任何一条纪律，问一句：“它能被一个脚本检查吗？”</strong> 能 →
-固化成 CI，零人力永不疲劳；不能 →
-它现在还停留在”靠自觉”。（第八课的”固化三问”在这里的工程形态。）</p>
 <h2
-id="五补章记忆内核四层token-预算即架构">五、补章：记忆内核四层（token
-预算即架构）</h2>
-<p>智能体的记忆不是”越大越好”，而是<strong>分四层、各管各的预算</strong>。超了不会报错——<strong>只是慢慢变笨</strong>：关键规则被挤出注意力窗口，输出质量悄悄滑坡，而你找不到任何报错日志。</p>
+id="二查找顺序就是设计两级查找同名覆盖">二、查找顺序就是设计：两级查找，同名覆盖</h2>
+<p>自定义专家放在项目级 <code>studio/agents/</code>
+下；内置专家在插件自带目录。<strong>同名时项目级赢</strong>——所以你可以写一个同名
+<code>.md</code>
+覆盖内置的通用角色：内置那个是通用的，你们行业的才是对的。出厂内置了 11
+个专家 + 1
+个模板，<strong>你的行业专家不在里面不是遗漏，是等你写</strong>。</p>
+<h2
+id="三动态专家发现五步每次运行都做">三、动态专家发现：五步（每次运行都做）</h2>
 <table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
 <thead>
 <tr class="header">
-<th>层</th>
-<th>token 预算</th>
-<th>放什么</th>
+<th>#</th>
+<th>做什么</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td><strong>CRITICAL</strong></td>
-<td>150–200</td>
-<td>违反就出事的红线（安全、合规、禁令）</td>
+<td>1</td>
+<td>主角色必载（如 product-manager）</td>
 </tr>
 <tr class="even">
-<td><strong>RULE</strong></td>
-<td>300–500</td>
-<td>行为规范、输出格式、工作流程</td>
+<td>2</td>
+<td>扫项目级 <code>studio/agents/*.md</code> 全部载入</td>
 </tr>
 <tr class="odd">
-<td><strong>CONTEXT</strong></td>
-<td>200–400</td>
-<td>当前项目背景、客户口径、会话状态</td>
+<td>3</td>
+<td>扫内置目录，<strong>跳过已从项目级载入的同名</strong> ←
+<strong>覆盖就发生在这一步</strong></td>
 </tr>
 <tr class="even">
-<td><strong>BACKGROUND</strong></td>
-<td>100–300</td>
-<td>参考知识、历史经验、低频备查</td>
+<td>4</td>
+<td>按 <code>## Your Domain</code> 段与本次主题比对，<strong>只选 1–3
+个</strong></td>
+</tr>
+<tr class="odd">
+<td>5</td>
+<td>跳过模板文件</td>
 </tr>
 </tbody>
 </table>
-<p><strong>classify.py
-的归层逻辑</strong>：行业相关内容<strong>归插件层</strong>，进 SPI
-槽位⑤（Agent
-定义），而不是塞进内核记忆——这与”判缝准则”是同一条纪律在记忆侧的投影。</p>
-<p><strong>与 L3 渐进式披露是同一约束的两端</strong>：L3
-讲的是<strong>生产侧投喂</strong>（采集来的资料别一次全塞），本章讲的是<strong>消费侧驻留</strong>（常驻记忆按预算分层）。两端共用一个判据——“每次都要看还是可能要看”。</p>
-<h2
-id="六诚实边界客户的技术负责人一定会问">六、诚实边界（客户的技术负责人一定会问）</h2>
-<p>演示拦截效果时必须一起报边界：测试覆盖了多少样本、哪些路径还没验。<strong>你先说，比被问出来强</strong>——这本身就是第一课讲的”可信度从哪来”。</p>
+<p>⚠️ 第 4 步只选 1–3
+个——<strong>专家造多了会互相稀释，不是越多越好</strong>。</p>
+<h2 id="四-专家是复核者不是生成者">四、⭐ 专家是复核者，不是生成者</h2>
+<p>主角色先产出初稿，专家在复核环节逐个挑错：标出”不正确、过度简化、遗漏”的地方，以及<strong>从业者实际会用的术语</strong>。</p>
+<p><strong>这一条决定了你写专家时该写什么</strong>：</p>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>写错的方向</th>
+<th>写对的方向</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>写它<strong>懂什么</strong>——倒一堆领域知识</td>
+<td>写它<strong>会挑什么错</strong>——列这一行的典型误判</td>
+</tr>
+<tr class="even">
+<td>结果：一份很专业的行业简介，但挑不出错</td>
+<td>结果：它能指着产出说”这条不对，因为……”</td>
+</tr>
+</tbody>
+</table>
+<p>专家文件四个部分：<code>Role</code> / <code>## Your Domain</code>（⭐
+决定它会不会被选中，要具体到”从业者会搜的词”）/
+<code>What You Contribute</code>（领域知识 · 现实约束 ·
+<strong>质量判据</strong>——第三块最见功力，写不出它就是行业简介不是专家）/
+行为方式。</p>
+<h2 id="五该造-不该造">五、该造 / 不该造</h2>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>✅ 该造</th>
+<th>❌ 不该造</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>这行有只有从业者才知道的坑</td>
+<td>只想让输出”更专业一点”（那是提示词问题）</td>
+</tr>
+<tr class="even">
+<td>有成文的标准/规程/禁忌可写进判断</td>
+<td>一次性项目，下次用不到</td>
+</tr>
+<tr class="odd">
+<td>同一类错在多个项目反复出现</td>
+<td>你自己也说不清它该挑什么错</td>
+</tr>
+<tr class="even">
+<td>内置术语和你们不一样 → <strong>同名覆盖</strong></td>
+<td>已有专家改两句就够用 → 覆盖</td>
+</tr>
+</tbody>
+</table>
+<h2 id="六-最常见的失效模式静默失效">六、⚠️
+最常见的失效模式：静默失效</h2>
+<p><code>## Your Domain</code> 写得含糊 →
+专家<strong>永远不会被选中</strong>——不报错、不警告，输出一切正常，只是它从来没被载入过。<strong>你以为专家在起作用，其实它一次都没跑。</strong></p>
+<p><strong>自查</strong>：跑一次技能，看发现阶段报出了哪些专家；没有你的
+→ 把 Domain 写具体；有但没挑出东西 → 补”质量判据”那块。</p>
 <h2 id="自测">自测</h2>
 <ol type="1">
-<li>为什么规则在写入”之后”执行，而不是之前？（校验的是”世界”不是”调用”）</li>
-<li>“拒绝是数据”是什么意思？为什么重要？</li>
-<li>SPI 七槽位为什么不能当自动化承诺用？</li>
-<li>两个 CI 门禁各守什么方向？</li>
-<li>记忆四层各管什么？超预算会怎样？（CRITICAL/RULE/CONTEXT/BACKGROUND
-各有 token 预算；不报错，只是慢慢变笨）</li>
+<li>同名覆盖发生在发现五步的哪一步？</li>
+<li>为什么说专家是”复核者不是生成者”？这决定了第三块该写什么？</li>
+<li>静默失效怎么自查？</li>
 </ol>
 <hr />
 <p><em>完整版见 <a
-href="https://finger999999.github.io/fde-course/课程/S2_本体引擎的工程实现.html">FDE
-课程中心 · S2</a></em></p>
+href="https://finger999999.github.io/fde-course/课程/A1_自定义智能体.html">FDE
+课程中心 · A1</a></em></p>
 
 <script>
 (function () {
