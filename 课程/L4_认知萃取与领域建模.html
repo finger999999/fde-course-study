@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>第四课 · 认知萃取 + 领域建模</title>
+  <style>
+    html {
+      color: #1a1a1a;
+      background-color: #fdfdfd;
+    }
+    body {
+      margin: 0 auto;
+      max-width: 36em;
+      padding-left: 50px;
+      padding-right: 50px;
+      padding-top: 50px;
+      padding-bottom: 50px;
+      hyphens: auto;
+      overflow-wrap: break-word;
+      text-rendering: optimizeLegibility;
+      font-kerning: normal;
+    }
+    @media (max-width: 600px) {
+      body {
+        font-size: 0.9em;
+        padding: 12px;
+      }
+      h1 {
+        font-size: 1.8em;
+      }
+    }
+    @media print {
+      html {
+        background-color: white;
+      }
+      body {
+        background-color: transparent;
+        color: black;
+        font-size: 12pt;
+      }
+      p, h2, h3 {
+        orphans: 3;
+        widows: 3;
+      }
+      h2, h3, h4 {
+        page-break-after: avoid;
+      }
+    }
+    p {
+      margin: 1em 0;
+    }
+    a {
+      color: #1a1a1a;
+    }
+    a:visited {
+      color: #1a1a1a;
+    }
+    img {
+      max-width: 100%;
+    }
+    svg {
+      height: auto;
+      max-width: 100%;
+    }
+    h1, h2, h3, h4, h5, h6 {
+      margin-top: 1.4em;
+    }
+    h5, h6 {
+      font-size: 1em;
+      font-style: italic;
+    }
+    h6 {
+      font-weight: normal;
+    }
+    ol, ul {
+      padding-left: 1.7em;
+      margin-top: 1em;
+    }
+    li > ol, li > ul {
+      margin-top: 0;
+    }
+    blockquote {
+      margin: 1em 0 1em 1.7em;
+      padding-left: 1em;
+      border-left: 2px solid #e6e6e6;
+      color: #606060;
+    }
+    code {
+      font-family: Menlo, Monaco, Consolas, 'Lucida Console', monospace;
+      font-size: 85%;
+      margin: 0;
+      hyphens: manual;
+    }
+    pre {
+      margin: 1em 0;
+      overflow: auto;
+    }
+    pre code {
+      padding: 0;
+      overflow: visible;
+      overflow-wrap: normal;
+    }
+    .sourceCode {
+     background-color: transparent;
+     overflow: visible;
+    }
+    hr {
+      background-color: #1a1a1a;
+      border: none;
+      height: 1px;
+      margin: 1em 0;
+    }
+    table {
+      margin: 1em 0;
+      border-collapse: collapse;
+      width: 100%;
+      overflow-x: auto;
+      display: block;
+      font-variant-numeric: lining-nums tabular-nums;
+    }
+    table caption {
+      margin-bottom: 0.75em;
+    }
+    tbody {
+      margin-top: 0.5em;
+      border-top: 1px solid #1a1a1a;
+      border-bottom: 1px solid #1a1a1a;
+    }
+    th {
+      border-top: 1px solid #1a1a1a;
+      padding: 0.25em 0.5em 0.25em 0.5em;
+    }
+    td {
+      padding: 0.125em 0.5em 0.25em 0.5em;
+    }
+    header {
+      margin-bottom: 4em;
+      text-align: center;
+    }
+    #TOC li {
+      list-style: none;
+    }
+    #TOC ul {
+      padding-left: 1.3em;
+    }
+    #TOC > ul {
+      padding-left: 0;
+    }
+    #TOC a:not(:hover) {
+      text-decoration: none;
+    }
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+  </style>
+
+<style id="fde-wide-layout-patch">
+/* ===== FDE 阅读优化样式 v4 ===== */
+html { font-size: 17px; }
+body {
+  font-family: -apple-system, "Segoe UI", "PingFang SC", "Hiragino Sans GB",
+               "Microsoft YaHei", "Source Han Sans SC", "Noto Sans CJK SC", sans-serif;
+  max-width: 42em; line-height: 1.85; color: #24292f;
+  padding: 24px 20px 64px; letter-spacing: .01em;
+}
+#title-block-header { display: none; }
+p { margin: 1.1em 0; }
+ul, ol { padding-left: 1.6em; margin: 1em 0; }
+li { margin: .35em 0; }
+h1, h2, h3, h4, h5, h6 { line-height: 1.4; color: #111827; scroll-margin-top: 16px; }
+h1 { font-size: 1.75em; margin: 0 0 .6em; padding-bottom: .4em; border-bottom: 2px solid #e5e7eb; }
+h2 {
+  font-size: 1.42em; margin: 2em 0 .9em; padding: .12em 0 .12em .6em;
+  border-left: 5px solid #2563eb; border-radius: 0 6px 6px 0;
+  background: linear-gradient(to right, #eff6ff, rgba(239,246,255,0));
+}
+h3 { font-size: 1.18em; margin: 1.6em 0 .7em; color: #1f2937; }
+h4 { font-size: 1.05em; margin: 1.4em 0 .6em; color: #374151; }
+a { color: #2563eb; text-decoration: none; }
+a:hover { text-decoration: underline; }
+blockquote {
+  margin: 1.2em 0; padding: .7em 1.2em; color: #374151;
+  background: #f8fafc; border-left: 4px solid #93c5fd; border-radius: 0 8px 8px 0;
+}
+blockquote p { margin: .5em 0; }
+code {
+  font-family: "Cascadia Code", Consolas, "Courier New", monospace;
+  font-size: .87em; background: rgba(175,184,193,.25); padding: .1em .4em; border-radius: 4px;
+}
+pre {
+  background: #f6f8fa; border: 1px solid #e5e7eb; border-radius: 8px;
+  padding: 14px 16px; overflow-x: auto; line-height: 1.6; margin: 1.2em 0;
+}
+pre code { background: transparent; padding: 0; font-size: .92em; }
+table { border-collapse: collapse; width: 100% !important; margin: 1.4em 0; font-size: .94em; }
+th, td { border: 1px solid #d0d7de; padding: 8px 12px; vertical-align: top; }
+th { background: #f2f4f7; font-weight: 600; }
+tbody tr:nth-child(even) td { background: #fafbfc; }
+hr { border: none; border-top: 1px solid #e5e7eb; margin: 2.4em 0; }
+img { max-width: 100%; border-radius: 6px; }
+#fde-toc {
+  display: none; position: fixed; left: 24px; top: 32px; width: 300px;
+  max-height: calc(100vh - 64px); overflow: auto; z-index: 10;
+  font-family: "Segoe UI", "Microsoft YaHei", "PingFang SC", sans-serif;
+  font-size: 14px; line-height: 1.55;
+  background: #fff; border: 1px solid #e5e7eb; border-radius: 10px;
+  padding: 14px 18px; box-shadow: 0 2px 12px rgba(0,0,0,.06);
+}
+#fde-toc .toc-title { font-weight: 700; color: #111827; margin-bottom: 8px; }
+#fde-toc a { display: block; color: #374151; text-decoration: none; padding: 2px 0; }
+#fde-toc a:hover { color: #2563eb; }
+#fde-toc a.active { color: #2563eb; font-weight: 600; }
+#fde-toc .toc-h1 { font-weight: 700; }
+#fde-toc .toc-h2 { margin-left: 10px; }
+#fde-toc .toc-h3 { margin-left: 24px; color: #6b7280; font-size: 13px; }
+#fde-toc .toc-back { margin-top: 10px; padding-top: 8px; border-top: 1px solid #e5e7eb; }
+@media (min-width: 1100px) {
+  html { font-size: 18px; background: #eceff3; }
+  body {
+    background: #fff; border-radius: 12px; box-shadow: 0 2px 18px rgba(15,23,42,.08);
+    margin: 28px auto 56px; padding: 40px 48px 64px;
+  }
+}
+@media (min-width: 1400px) {
+  body { margin-left: max(360px, calc(50vw - 21em + 74px)); margin-right: auto; }
+  #fde-toc { display: block; }
+}
+</style>
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">第四课 · 认知萃取 + 领域建模</h1>
+</header>
+<h1 id="第四课-认知萃取-领域建模">第四课 · 认知萃取 + 领域建模</h1>
+<blockquote>
+<p><strong>学习版说明</strong>：上半场学”零件”（业务分析六件套），下半场学”装配线”（把事件切成域）。这是把第三课的输入包变成可执行结构的一课——<strong>FDE
+的核心资产不是会用 AI，是把客户的模糊意图压成可执行的结构</strong>。</p>
+</blockquote>
+<h2 id="学习目标">学习目标</h2>
+<ul class="task-list">
+<li><label><input type="checkbox" />说清
+<code>事件 → 画像 → 旅程 → 机会矩阵</code>
+这条管线和它的先后顺序</label></li>
+<li><label><input
+type="checkbox" />分辨真画像和假画像，会给旅程选对场景</label></li>
+<li><label><input type="checkbox" />用 DDD
+三判据切域，写对”业务事件”</label></li>
+<li><label><input
+type="checkbox" />知道跑完本课后路分三条，各自通向哪一课</label></li>
+</ul>
+<h2 id="上半场-认知萃取产品设计这一栈">上半场 ·
+认知萃取（产品设计这一栈）</h2>
+<h3 id="核心管线">核心管线</h3>
+<blockquote>
+<p><strong>一条把”客户想要点什么”逼成可归域结构的方法论管线</strong>：
+<code>事件 → 画像 → 旅程 → 机会矩阵</code>
+→（出口直接插进下半场的限界上下文）</p>
+</blockquote>
+<h3 id="五个方法对应-insight-六件套">五个方法（对应 insight
+六件套）</h3>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>方法</th>
+<th>要点</th>
+<th>工具</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>用户画像 Persona</strong></td>
+<td>按<strong>行为/目标/动机/痛点</strong>定义真实用户，不是人口属性堆砌</td>
+<td><code>persona-insight</code></td>
+</tr>
+<tr class="even">
+<td><strong>用户旅程图</strong></td>
+<td>五要素：用户 / 场景与目标 / 旅程阶段 / 行为·态度·情绪 / 机会点</td>
+<td><code>journey-map</code></td>
+</tr>
+<tr class="odd">
+<td><strong>机会矩阵</strong></td>
+<td>把旅程暴露的痛点排优先级（影响 × 可行性）</td>
+<td><code>opportunity-brief</code></td>
+</tr>
+<tr class="even">
+<td><strong>事件风暴</strong></td>
+<td>业务事件全量铺开再归簇，喂给限界上下文</td>
+<td>下半场 <code>event-storm</code></td>
+</tr>
+<tr class="odd">
+<td><strong>产品思维</strong></td>
+<td>痛点/痒点/爽点；点线面体；用户体验五层</td>
+<td>贯穿六件套</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>画像 → 旅程 →
+机会矩阵是有先后的：画像不真，旅程就是编的；旅程不暴露痛点，机会矩阵就没有原料。这条顺序不能倒。</strong></p>
+</blockquote>
+<h3 id="三件必须讲透的事">三件必须讲透的事</h3>
+<p><strong>①
+画像的真假之分（上半场核心）</strong>：判据——两个画像如果目标、痛点、使用频率<strong>没有显著差异，就不该拆成两个</strong>。假画像按人口属性切（“25-35
+岁白领”），真画像按行为差异切。</p>
+<p><strong>②
+旅程要选”最暴露痛点”的场景，不是最典型的场景</strong>。选之前先回头看商业模式：收入线在哪条旅程上，就做那条。（反例
+B-7：有项目旅程建模过重，返工。）</p>
+<p><strong>③ 热点分层是给决策者看的，不是给自己看的</strong>。P1–P5
+的排序是价值判断——这正是”人的部分”不可外包给模型的具体落点。</p>
+<p><strong>量级标尺（真实项目）</strong>：102 个业务事件 → 16 簇 → 7
+个画像（368 份问卷校准）→ 7 条旅程 → 5 条流程 → 10 个热点 → 7 个域。</p>
+<h2 id="下半场-领域建模ddd-这一栈">下半场 · 领域建模（DDD 这一栈）</h2>
+<h3
+id="先把事件写对最容易错的一步">先把”事件”写对（最容易错的一步）</h3>
+<p><strong>事件是过去式的既成事实</strong>——“材料已上传”“质检已通过”；<strong>不是</strong>”支持材料上传”“实现质检模块”（那是功能清单）。</p>
+<blockquote>
+<p><strong>判据</strong>：能不能加”已”字、并且它已经发生过、不可撤销？能，才是事件。
+<strong>事件写歪，域必然切歪，而且到第五课才会疼。</strong></p>
+</blockquote>
+<h3 id="ddd-三件核心">DDD 三件核心</h3>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>概念</th>
+<th>一句话</th>
+<th>例子</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>统一语言</strong></td>
+<td>业务方和工程师用同一套词，且直接出现在代码里</td>
+<td>同一个”老人”只有一个真相源</td>
+</tr>
+<tr class="even">
+<td><strong>限界上下文</strong></td>
+<td>一个词在一个边界内只有一个含义；出了边界就是另一个概念</td>
+<td>102 事件切成 7 个域</td>
+</tr>
+<tr class="odd">
+<td><strong>上下文映射</strong></td>
+<td>两域之间是”引用”还是”发布”必须说得出来</td>
+<td>跨域一律 ref/发布，<strong>不越界直写</strong>（反例 B-8）</td>
+</tr>
+</tbody>
+</table>
+<h3 id="切域三判据对着你的域图问">切域三判据（对着你的域图问）</h3>
+<ol type="1">
+<li><strong>同一个词在两个地方含义不同 →
+该切开</strong>（“老人”在照护域是被照护对象，在会员域是消费者——同一个人，两套属性、两套规则）</li>
+<li><strong>状态机不共享 →
+该切开</strong>（生命周期在两处被不同的人推进，说明它其实是两个对象）</li>
+<li><strong>能独立发布 →
+该切开</strong>（一个域要对监管机构负责，另一个对市场负责，捆在一起每次发布都要同时说服两边）</li>
+</ol>
+<blockquote>
+<p><strong>定义一个域最有效的方式，是说清它不管什么（<code>Does NOT own</code>）。</strong></p>
+</blockquote>
+<h3 id="planner-五步流水线与你的角色">planner 五步流水线与你的角色</h3>
+<pre><code>事件风暴 → 域模型 → 技能设计 → 骨架 → 填充</code></pre>
+<ul>
+<li>衔接靠<strong>文件 +
+status.json</strong>，不靠内存传参——管线是给你用的，不是替你做主的</li>
+<li><strong>跑到 <code>skill-map.md</code>
+就停</strong>（再往后是第八课的活）</li>
+<li><code>Generic Capabilities</code>（通用能力）这段是精华：经常问”这个能力买现成的行不行？“答案常常是行——<strong>不是所有域都值得当核心来建</strong></li>
+<li><strong>traits
+是流水线的”分叉开关”</strong>：现在选错，第八课生成的骨架就不对</li>
+<li><strong>skill-map
+溯源自检</strong>：每个插件都能在第三课的项目描述里找到出处；<strong>找不到出处的插件，多半是你自己想出来的，不是客户要的</strong></li>
+</ul>
+<h2 id="本课结束时必须知道后面是分叉不是流水线">⭐
+本课结束时必须知道：后面是分叉，不是流水线</h2>
+<pre><code>domain-map ──▶ 第五课 本体建模（要&quot;可执行的规则与闸&quot;）
++ skill-map ──▶ 第六课 文档工程（要&quot;可评审的文书&quot;）
+           ──▶ 第八课 技能插件（要&quot;可发版的插件&quot;）</code></pre>
+<p><strong>三条并行、不互为前置。</strong>
+交付模式决定优先级：模式二（赢单靠评审）→
+第六课优先；模式一（赢单靠能用）→ 第五+七课优先；要沉淀可复用能力 →
+第八课。有真实项目没做本体建模，照样交出了完整可研——<strong>别以为”不编译本体就不能写方案”</strong>。</p>
+<h2 id="自测">自测</h2>
+<ol type="1">
+<li>画像、旅程、机会矩阵为什么顺序不能倒？</li>
+<li>怎么判断一句话是不是”业务事件”？（能加”已”字、已发生、不可撤销）</li>
+<li>切域三判据是什么？</li>
+<li>你的 skill-map 里每个插件都能在项目描述里找到出处吗？</li>
+</ol>
+<hr />
+<p><em>完整版见 <a
+href="https://finger999999.github.io/fde-course/课程/L4_认知萃取与领域建模.html">FDE
+课程中心 · L4</a></em></p>
+
+<script>
+(function () {
+  var heads = Array.prototype.filter.call(document.querySelectorAll("h1, h2, h3"), function (h) { return !h.closest("#title-block-header"); });
+  if (heads.length < 3) return;
+  var nav = document.createElement("nav");
+  nav.id = "fde-toc";
+  var html = '<div class="toc-title">本页目录</div>';
+  var links = [];
+  heads.forEach(function (h, i) {
+    if (!h.id) h.id = "fde-sec-" + i;
+    var cls = "toc-" + h.tagName.toLowerCase();
+    html += '<a class="' + cls + '" href="#' + h.id + '">' + h.textContent + "</a>";
+    links.push({ a: null, h: h });
+  });
+  html += '<div class="toc-back"><a href="../index.html">← 返回学习版首页</a></div>';
+  nav.innerHTML = html;
+  document.body.appendChild(nav);
+  var as = nav.querySelectorAll("a[href^='#']");
+  as.forEach(function (a, i) { links[i].a = a; });
+  function onScroll() {
+    var cur = 0;
+    links.forEach(function (l, i) {
+      if (l.h.getBoundingClientRect().top < 120) cur = i;
+    });
+    links.forEach(function (l, i) { l.a.classList.toggle("active", i === cur); });
+  }
+  window.addEventListener("scroll", onScroll, { passive: true });
+  onScroll();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,12 @@
+{
+  "name": "fde-course-study-preview",
+  "private": true,
+  "version": "1.0.0",
+  "description": "FDE 课程学习版本地静态预览",
+  "scripts": {
+    "dev": "vite"
+  },
+  "devDependencies": {
+    "vite": "^5.4.0"
+  }
+}

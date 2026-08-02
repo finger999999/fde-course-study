@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>第八课 · 总结与能力沉淀</title>
+  <style>
+    html {
+      color: #1a1a1a;
+      background-color: #fdfdfd;
+    }
+    body {
+      margin: 0 auto;
+      max-width: 36em;
+      padding-left: 50px;
+      padding-right: 50px;
+      padding-top: 50px;
+      padding-bottom: 50px;
+      hyphens: auto;
+      overflow-wrap: break-word;
+      text-rendering: optimizeLegibility;
+      font-kerning: normal;
+    }
+    @media (max-width: 600px) {
+      body {
+        font-size: 0.9em;
+        padding: 12px;
+      }
+      h1 {
+        font-size: 1.8em;
+      }
+    }
+    @media print {
+      html {
+        background-color: white;
+      }
+      body {
+        background-color: transparent;
+        color: black;
+        font-size: 12pt;
+      }
+      p, h2, h3 {
+        orphans: 3;
+        widows: 3;
+      }
+      h2, h3, h4 {
+        page-break-after: avoid;
+      }
+    }
+    p {
+      margin: 1em 0;
+    }
+    a {
+      color: #1a1a1a;
+    }
+    a:visited {
+      color: #1a1a1a;
+    }
+    img {
+      max-width: 100%;
+    }
+    svg {
+      height: auto;
+      max-width: 100%;
+    }
+    h1, h2, h3, h4, h5, h6 {
+      margin-top: 1.4em;
+    }
+    h5, h6 {
+      font-size: 1em;
+      font-style: italic;
+    }
+    h6 {
+      font-weight: normal;
+    }
+    ol, ul {
+      padding-left: 1.7em;
+      margin-top: 1em;
+    }
+    li > ol, li > ul {
+      margin-top: 0;
+    }
+    blockquote {
+      margin: 1em 0 1em 1.7em;
+      padding-left: 1em;
+      border-left: 2px solid #e6e6e6;
+      color: #606060;
+    }
+    code {
+      font-family: Menlo, Monaco, Consolas, 'Lucida Console', monospace;
+      font-size: 85%;
+      margin: 0;
+      hyphens: manual;
+    }
+    pre {
+      margin: 1em 0;
+      overflow: auto;
+    }
+    pre code {
+      padding: 0;
+      overflow: visible;
+      overflow-wrap: normal;
+    }
+    .sourceCode {
+     background-color: transparent;
+     overflow: visible;
+    }
+    hr {
+      background-color: #1a1a1a;
+      border: none;
+      height: 1px;
+      margin: 1em 0;
+    }
+    table {
+      margin: 1em 0;
+      border-collapse: collapse;
+      width: 100%;
+      overflow-x: auto;
+      display: block;
+      font-variant-numeric: lining-nums tabular-nums;
+    }
+    table caption {
+      margin-bottom: 0.75em;
+    }
+    tbody {
+      margin-top: 0.5em;
+      border-top: 1px solid #1a1a1a;
+      border-bottom: 1px solid #1a1a1a;
+    }
+    th {
+      border-top: 1px solid #1a1a1a;
+      padding: 0.25em 0.5em 0.25em 0.5em;
+    }
+    td {
+      padding: 0.125em 0.5em 0.25em 0.5em;
+    }
+    header {
+      margin-bottom: 4em;
+      text-align: center;
+    }
+    #TOC li {
+      list-style: none;
+    }
+    #TOC ul {
+      padding-left: 1.3em;
+    }
+    #TOC > ul {
+      padding-left: 0;
+    }
+    #TOC a:not(:hover) {
+      text-decoration: none;
+    }
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+  </style>
+
+<style id="fde-wide-layout-patch">
+/* ===== FDE 阅读优化样式 v4 ===== */
+html { font-size: 17px; }
+body {
+  font-family: -apple-system, "Segoe UI", "PingFang SC", "Hiragino Sans GB",
+               "Microsoft YaHei", "Source Han Sans SC", "Noto Sans CJK SC", sans-serif;
+  max-width: 42em; line-height: 1.85; color: #24292f;
+  padding: 24px 20px 64px; letter-spacing: .01em;
+}
+#title-block-header { display: none; }
+p { margin: 1.1em 0; }
+ul, ol { padding-left: 1.6em; margin: 1em 0; }
+li { margin: .35em 0; }
+h1, h2, h3, h4, h5, h6 { line-height: 1.4; color: #111827; scroll-margin-top: 16px; }
+h1 { font-size: 1.75em; margin: 0 0 .6em; padding-bottom: .4em; border-bottom: 2px solid #e5e7eb; }
+h2 {
+  font-size: 1.42em; margin: 2em 0 .9em; padding: .12em 0 .12em .6em;
+  border-left: 5px solid #2563eb; border-radius: 0 6px 6px 0;
+  background: linear-gradient(to right, #eff6ff, rgba(239,246,255,0));
+}
+h3 { font-size: 1.18em; margin: 1.6em 0 .7em; color: #1f2937; }
+h4 { font-size: 1.05em; margin: 1.4em 0 .6em; color: #374151; }
+a { color: #2563eb; text-decoration: none; }
+a:hover { text-decoration: underline; }
+blockquote {
+  margin: 1.2em 0; padding: .7em 1.2em; color: #374151;
+  background: #f8fafc; border-left: 4px solid #93c5fd; border-radius: 0 8px 8px 0;
+}
+blockquote p { margin: .5em 0; }
+code {
+  font-family: "Cascadia Code", Consolas, "Courier New", monospace;
+  font-size: .87em; background: rgba(175,184,193,.25); padding: .1em .4em; border-radius: 4px;
+}
+pre {
+  background: #f6f8fa; border: 1px solid #e5e7eb; border-radius: 8px;
+  padding: 14px 16px; overflow-x: auto; line-height: 1.6; margin: 1.2em 0;
+}
+pre code { background: transparent; padding: 0; font-size: .92em; }
+table { border-collapse: collapse; width: 100% !important; margin: 1.4em 0; font-size: .94em; }
+th, td { border: 1px solid #d0d7de; padding: 8px 12px; vertical-align: top; }
+th { background: #f2f4f7; font-weight: 600; }
+tbody tr:nth-child(even) td { background: #fafbfc; }
+hr { border: none; border-top: 1px solid #e5e7eb; margin: 2.4em 0; }
+img { max-width: 100%; border-radius: 6px; }
+#fde-toc {
+  display: none; position: fixed; left: 24px; top: 32px; width: 300px;
+  max-height: calc(100vh - 64px); overflow: auto; z-index: 10;
+  font-family: "Segoe UI", "Microsoft YaHei", "PingFang SC", sans-serif;
+  font-size: 14px; line-height: 1.55;
+  background: #fff; border: 1px solid #e5e7eb; border-radius: 10px;
+  padding: 14px 18px; box-shadow: 0 2px 12px rgba(0,0,0,.06);
+}
+#fde-toc .toc-title { font-weight: 700; color: #111827; margin-bottom: 8px; }
+#fde-toc a { display: block; color: #374151; text-decoration: none; padding: 2px 0; }
+#fde-toc a:hover { color: #2563eb; }
+#fde-toc a.active { color: #2563eb; font-weight: 600; }
+#fde-toc .toc-h1 { font-weight: 700; }
+#fde-toc .toc-h2 { margin-left: 10px; }
+#fde-toc .toc-h3 { margin-left: 24px; color: #6b7280; font-size: 13px; }
+#fde-toc .toc-back { margin-top: 10px; padding-top: 8px; border-top: 1px solid #e5e7eb; }
+@media (min-width: 1100px) {
+  html { font-size: 18px; background: #eceff3; }
+  body {
+    background: #fff; border-radius: 12px; box-shadow: 0 2px 18px rgba(15,23,42,.08);
+    margin: 28px auto 56px; padding: 40px 48px 64px;
+  }
+}
+@media (min-width: 1400px) {
+  body { margin-left: max(360px, calc(50vw - 21em + 74px)); margin-right: auto; }
+  #fde-toc { display: block; }
+}
+</style>
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">第八课 · 总结与能力沉淀</h1>
+</header>
+<h1 id="第八课-总结与能力沉淀">第八课 · 总结与能力沉淀</h1>
+<blockquote>
+<p><strong>学习版说明</strong>：前七课收”手艺”，这一课收”能不能把手艺交给你”。三件事：把经验固化成组织能力、把团队编成和
+90 天计划定下来、通过路演验收定级。</p>
+</blockquote>
+<h2 id="学习目标">学习目标</h2>
+<ul class="task-list">
+<li><label><input
+type="checkbox" />掌握”固化三问”心智模型，会评估一个平台成不成熟</label></li>
+<li><label><input type="checkbox" />说清校验器在守什么、promote
+为什么不自动提交</label></li>
+<li><label><input
+type="checkbox" />记住三条一票警示，完成诚实的自我定级</label></li>
+</ul>
+<h2
+id="一能力沉淀从我做过到组织有这个能力">一、能力沉淀：从”我做过”到”组织有这个能力”</h2>
+<p>前七课你做的是<strong>这一个项目</strong>；这一节做的是<strong>下一个项目</strong>——把这次反复做的动作，沉淀成下次开箱即用的工具。</p>
+<h3 id="固化三问本课唯一要带走的心智模型">⭐
+固化三问（本课唯一要带走的心智模型）</h3>
+<p>任何一条你反复叮嘱新人的纪律，都问它三个问题：<strong>能不能固化？固化成什么？谁来跑？</strong></p>
+<table>
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>档</th>
+<th>例子</th>
+<th>固化成什么</th>
+<th>人力成本</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>全固化</strong></td>
+<td>“跨域不许越界写”</td>
+<td>结构校验器，编译期自动</td>
+<td><strong>零人力，永不疲劳</strong></td>
+</tr>
+<tr class="even">
+<td><strong>全固化</strong></td>
+<td>“引用的脚本必须存在”</td>
+<td>校验脚本</td>
+<td>零人力</td>
+</tr>
+<tr class="odd">
+<td><strong>半固化</strong></td>
+<td>“关键数字锚在单点”</td>
+<td>BRIEF + 装配期检查，人复核</td>
+<td>一道人工闸</td>
+</tr>
+<tr class="even">
+<td><strong>半固化</strong></td>
+<td>“不确定就显式挂账”</td>
+<td>文档挂账约定</td>
+<td>一道人工闸</td>
+</tr>
+<tr class="odd">
+<td><strong>未固化</strong></td>
+<td>只活在你脑子里的那条</td>
+<td>无</td>
+<td><strong>全靠自觉，请假即崩</strong></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>评估一个平台成不成熟，就看它把你多少条纪律固化进了校验器。</strong>
+真实项目能做到 1 名 FDE + 智能体编队顶掉传统 5
+人数周，不是因为手快，是因为绝大部分一致性纪律被搬进了编译期和装配期。</p>
+</blockquote>
+<h3 id="沉淀四步链路">沉淀四步链路</h3>
+<pre><code>spec-generate（唯一零确认点的一步；边界之外一律不动——这是可预测性的来源）
+  → build-skills（初稿不是成品；工具不会自己给自己发合格证）
+  → 校验器（&quot;什么叫做完了&quot;的操作定义：结构 7 类 + 逐技能 9 类 + 依赖 3 组）
+  → promote（里程碑存档）</code></pre>
+<p><strong>promote 的”不做清单”比”做”更值得记</strong>：它不自动 git
+commit——<strong>因为提交是人的决定</strong>；它不顺手清理计划外的东西——<strong>边界之外一律不动</strong>。</p>
+<p><strong>活证据</strong>：采购报价优化插件 <code>fund-review</code>
+就是从真实交付里反向沉淀出来的——一个项目里反复做的动作，变成下个项目直接调用的插件。</p>
+<p>🔔
+<strong>现在轮到你回答</strong>：你们这五天做的动作，<strong>哪一个值得沉淀成插件？</strong>
+追问：它是”下个项目还会再做一遍”的动作吗？还是只有你们这个命题才有？<strong>为做插件而做插件，拿不到加分。</strong></p>
+<h2 id="二opc-边界回收与团队编成">二、OPC 边界回收与团队编成</h2>
+<p>第一课画的线在这里回收：可替侧（智能体能放大的）与必须人扛侧（C7）的边界不变，变的是你现在已经能亲手走完全程。</p>
+<p><strong>团队不是”招一堆全能
+FDE”（那是幻想），而是非对称编队</strong>：</p>
+<table>
+<thead>
+<tr class="header">
+<th>角色</th>
+<th>提供什么</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Lv.3 主理</strong></td>
+<td><strong>判断和责任</strong>——编队的”判断中枢”</td>
+</tr>
+<tr class="even">
+<td><strong>Lv.1 见习</strong></td>
+<td>手数和成长通道——承接单一环节，在真实项目里练</td>
+</tr>
+<tr class="odd">
+<td><strong>平台组</strong></td>
+<td><strong>杠杆</strong>——维护建模管线，把方法论固化成工具</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>三者缺一，项目不可复制。<strong>没有平台组，Lv.3
+也会退化成一个更累的架构师。</strong></p>
+</blockquote>
+<p>规模化的前提不是”招更多人”，而是：下一个项目关键指标达到基线 + Lv.1
+里有人升到 Lv.2。</p>
+<h2 id="三路演与三条一票警示">三、路演与三条一票警示</h2>
+<p>路演每组 20
+分钟，用八维评审卡评分（评审卡只有一个真相源，两处维护一张表必然漂移——这正是第六课”编号权归装配”同一条纪律）。<strong>比的是判断，不是美工。</strong></p>
+<h3 id="三条一票警示触发任一条即不通过">⚠️
+三条一票警示（触发任一条即不通过）</h3>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>警示</th>
+<th>真实形态（都不是明目张胆造假）</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>① 编造查不到的文号（B-10）</strong></td>
+<td>“看起来像标准号就用”——问一句”这个号你在哪查到的”，当场就露</td>
+</tr>
+<tr class="even">
+<td><strong>② 把别处模板的数字当自己的（B-11）</strong></td>
+<td>模板复用时把上一个项目的数字一起带过来</td>
+</tr>
+<tr class="odd">
+<td><strong>③ 把目标值 / Mock demo 说成已实现</strong></td>
+<td><strong>不是撒谎，是不说</strong>——所以规定 demo 必须先念 Mock
+清单再演</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>⭐ <strong>三条其实是同一条：空缺可以补，编造无法挽回。</strong>
+七课工具练的是手艺，<strong>这一条练的是能不能把手艺交给你。</strong></p>
+</blockquote>
+<h2 id="四结课定级">四、结课定级</h2>
+<table>
+<thead>
+<tr class="header">
+<th>等级</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Lv.1 见习</strong></td>
+<td>能在指导下承接单一环节</td>
+</tr>
+<tr class="even">
+<td><strong>Lv.2 胜任</strong></td>
+<td>独立完成认知侧全链条，交付物需一次复核</td>
+</tr>
+<tr class="odd">
+<td><strong>Lv.3 主理</strong></td>
+<td>主持项目、设闸、对客户承诺负责，并能带 Lv.1</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>定级<strong>看证据不看感觉</strong>：举不出”我在压力下真做过留白不编造”这个例子的人，不该给自己填
+Lv.3</li>
+<li>多数人第一次停在 Lv.1，这是正常的；<strong>装作 Lv.2
+才是危险的</strong></li>
+<li>当堂填一张<strong>差距清单</strong>带走：诚实回答”这个我补不了”的人，比嘴上说”我都行”的人更接近
+Lv.3</li>
+</ul>
+<h2 id="自测">自测</h2>
+<ol type="1">
+<li>固化三问是哪三问？你的项目里有哪条纪律还停在”未固化”？</li>
+<li>promote 为什么不自动提交？</li>
+<li>三条一票警示的共同判据是什么？</li>
+<li>你给自己定哪一级？证据是什么？</li>
+</ol>
+<hr />
+<p><em>完整版见 <a
+href="https://finger999999.github.io/fde-course/课程/L8_总结与能力沉淀.html">FDE
+课程中心 · L8</a></em></p>
+
+<script>
+(function () {
+  var heads = Array.prototype.filter.call(document.querySelectorAll("h1, h2, h3"), function (h) { return !h.closest("#title-block-header"); });
+  if (heads.length < 3) return;
+  var nav = document.createElement("nav");
+  nav.id = "fde-toc";
+  var html = '<div class="toc-title">本页目录</div>';
+  var links = [];
+  heads.forEach(function (h, i) {
+    if (!h.id) h.id = "fde-sec-" + i;
+    var cls = "toc-" + h.tagName.toLowerCase();
+    html += '<a class="' + cls + '" href="#' + h.id + '">' + h.textContent + "</a>";
+    links.push({ a: null, h: h });
+  });
+  html += '<div class="toc-back"><a href="../index.html">← 返回学习版首页</a></div>';
+  nav.innerHTML = html;
+  document.body.appendChild(nav);
+  var as = nav.querySelectorAll("a[href^='#']");
+  as.forEach(function (a, i) { links[i].a = a; });
+  function onScroll() {
+    var cur = 0;
+    links.forEach(function (l, i) {
+      if (l.h.getBoundingClientRect().top < 120) cur = i;
+    });
+    links.forEach(function (l, i) { l.a.classList.toggle("active", i === cur); });
+  }
+  window.addEventListener("scroll", onScroll, { passive: true });
+  onScroll();
+})();
+</script>
+</body>
+</html>

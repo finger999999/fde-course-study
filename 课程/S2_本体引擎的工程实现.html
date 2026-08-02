@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>专题课 S2 · 本体引擎的工程实现</title>
+  <style>
+    html {
+      color: #1a1a1a;
+      background-color: #fdfdfd;
+    }
+    body {
+      margin: 0 auto;
+      max-width: 36em;
+      padding-left: 50px;
+      padding-right: 50px;
+      padding-top: 50px;
+      padding-bottom: 50px;
+      hyphens: auto;
+      overflow-wrap: break-word;
+      text-rendering: optimizeLegibility;
+      font-kerning: normal;
+    }
+    @media (max-width: 600px) {
+      body {
+        font-size: 0.9em;
+        padding: 12px;
+      }
+      h1 {
+        font-size: 1.8em;
+      }
+    }
+    @media print {
+      html {
+        background-color: white;
+      }
+      body {
+        background-color: transparent;
+        color: black;
+        font-size: 12pt;
+      }
+      p, h2, h3 {
+        orphans: 3;
+        widows: 3;
+      }
+      h2, h3, h4 {
+        page-break-after: avoid;
+      }
+    }
+    p {
+      margin: 1em 0;
+    }
+    a {
+      color: #1a1a1a;
+    }
+    a:visited {
+      color: #1a1a1a;
+    }
+    img {
+      max-width: 100%;
+    }
+    svg {
+      height: auto;
+      max-width: 100%;
+    }
+    h1, h2, h3, h4, h5, h6 {
+      margin-top: 1.4em;
+    }
+    h5, h6 {
+      font-size: 1em;
+      font-style: italic;
+    }
+    h6 {
+      font-weight: normal;
+    }
+    ol, ul {
+      padding-left: 1.7em;
+      margin-top: 1em;
+    }
+    li > ol, li > ul {
+      margin-top: 0;
+    }
+    blockquote {
+      margin: 1em 0 1em 1.7em;
+      padding-left: 1em;
+      border-left: 2px solid #e6e6e6;
+      color: #606060;
+    }
+    code {
+      font-family: Menlo, Monaco, Consolas, 'Lucida Console', monospace;
+      font-size: 85%;
+      margin: 0;
+      hyphens: manual;
+    }
+    pre {
+      margin: 1em 0;
+      overflow: auto;
+    }
+    pre code {
+      padding: 0;
+      overflow: visible;
+      overflow-wrap: normal;
+    }
+    .sourceCode {
+     background-color: transparent;
+     overflow: visible;
+    }
+    hr {
+      background-color: #1a1a1a;
+      border: none;
+      height: 1px;
+      margin: 1em 0;
+    }
+    table {
+      margin: 1em 0;
+      border-collapse: collapse;
+      width: 100%;
+      overflow-x: auto;
+      display: block;
+      font-variant-numeric: lining-nums tabular-nums;
+    }
+    table caption {
+      margin-bottom: 0.75em;
+    }
+    tbody {
+      margin-top: 0.5em;
+      border-top: 1px solid #1a1a1a;
+      border-bottom: 1px solid #1a1a1a;
+    }
+    th {
+      border-top: 1px solid #1a1a1a;
+      padding: 0.25em 0.5em 0.25em 0.5em;
+    }
+    td {
+      padding: 0.125em 0.5em 0.25em 0.5em;
+    }
+    header {
+      margin-bottom: 4em;
+      text-align: center;
+    }
+    #TOC li {
+      list-style: none;
+    }
+    #TOC ul {
+      padding-left: 1.3em;
+    }
+    #TOC > ul {
+      padding-left: 0;
+    }
+    #TOC a:not(:hover) {
+      text-decoration: none;
+    }
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+  </style>
+
+<style id="fde-wide-layout-patch">
+/* ===== FDE 阅读优化样式 v4 ===== */
+html { font-size: 17px; }
+body {
+  font-family: -apple-system, "Segoe UI", "PingFang SC", "Hiragino Sans GB",
+               "Microsoft YaHei", "Source Han Sans SC", "Noto Sans CJK SC", sans-serif;
+  max-width: 42em; line-height: 1.85; color: #24292f;
+  padding: 24px 20px 64px; letter-spacing: .01em;
+}
+#title-block-header { display: none; }
+p { margin: 1.1em 0; }
+ul, ol { padding-left: 1.6em; margin: 1em 0; }
+li { margin: .35em 0; }
+h1, h2, h3, h4, h5, h6 { line-height: 1.4; color: #111827; scroll-margin-top: 16px; }
+h1 { font-size: 1.75em; margin: 0 0 .6em; padding-bottom: .4em; border-bottom: 2px solid #e5e7eb; }
+h2 {
+  font-size: 1.42em; margin: 2em 0 .9em; padding: .12em 0 .12em .6em;
+  border-left: 5px solid #2563eb; border-radius: 0 6px 6px 0;
+  background: linear-gradient(to right, #eff6ff, rgba(239,246,255,0));
+}
+h3 { font-size: 1.18em; margin: 1.6em 0 .7em; color: #1f2937; }
+h4 { font-size: 1.05em; margin: 1.4em 0 .6em; color: #374151; }
+a { color: #2563eb; text-decoration: none; }
+a:hover { text-decoration: underline; }
+blockquote {
+  margin: 1.2em 0; padding: .7em 1.2em; color: #374151;
+  background: #f8fafc; border-left: 4px solid #93c5fd; border-radius: 0 8px 8px 0;
+}
+blockquote p { margin: .5em 0; }
+code {
+  font-family: "Cascadia Code", Consolas, "Courier New", monospace;
+  font-size: .87em; background: rgba(175,184,193,.25); padding: .1em .4em; border-radius: 4px;
+}
+pre {
+  background: #f6f8fa; border: 1px solid #e5e7eb; border-radius: 8px;
+  padding: 14px 16px; overflow-x: auto; line-height: 1.6; margin: 1.2em 0;
+}
+pre code { background: transparent; padding: 0; font-size: .92em; }
+table { border-collapse: collapse; width: 100% !important; margin: 1.4em 0; font-size: .94em; }
+th, td { border: 1px solid #d0d7de; padding: 8px 12px; vertical-align: top; }
+th { background: #f2f4f7; font-weight: 600; }
+tbody tr:nth-child(even) td { background: #fafbfc; }
+hr { border: none; border-top: 1px solid #e5e7eb; margin: 2.4em 0; }
+img { max-width: 100%; border-radius: 6px; }
+#fde-toc {
+  display: none; position: fixed; left: 24px; top: 32px; width: 300px;
+  max-height: calc(100vh - 64px); overflow: auto; z-index: 10;
+  font-family: "Segoe UI", "Microsoft YaHei", "PingFang SC", sans-serif;
+  font-size: 14px; line-height: 1.55;
+  background: #fff; border: 1px solid #e5e7eb; border-radius: 10px;
+  padding: 14px 18px; box-shadow: 0 2px 12px rgba(0,0,0,.06);
+}
+#fde-toc .toc-title { font-weight: 700; color: #111827; margin-bottom: 8px; }
+#fde-toc a { display: block; color: #374151; text-decoration: none; padding: 2px 0; }
+#fde-toc a:hover { color: #2563eb; }
+#fde-toc a.active { color: #2563eb; font-weight: 600; }
+#fde-toc .toc-h1 { font-weight: 700; }
+#fde-toc .toc-h2 { margin-left: 10px; }
+#fde-toc .toc-h3 { margin-left: 24px; color: #6b7280; font-size: 13px; }
+#fde-toc .toc-back { margin-top: 10px; padding-top: 8px; border-top: 1px solid #e5e7eb; }
+@media (min-width: 1100px) {
+  html { font-size: 18px; background: #eceff3; }
+  body {
+    background: #fff; border-radius: 12px; box-shadow: 0 2px 18px rgba(15,23,42,.08);
+    margin: 28px auto 56px; padding: 40px 48px 64px;
+  }
+}
+@media (min-width: 1400px) {
+  body { margin-left: max(360px, calc(50vw - 21em + 74px)); margin-right: auto; }
+  #fde-toc { display: block; }
+}
+</style>
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">专题课 S2 · 本体引擎的工程实现</h1>
+</header>
+<h1 id="专题课-s2-本体引擎的工程实现">专题课 S2 ·
+本体引擎的工程实现</h1>
+<blockquote>
+<p><strong>学习版说明</strong>：内核怎么造。教材就是
+<code>clife-onto-engine</code>
+的源码和架构图本身——图上每个块都标了文件名，看不懂的地方打开代码。只上
+S1 不上 S2，你能判断一个本体方案好不好，但说不出”好在哪一行”。</p>
+</blockquote>
+<h2 id="学习目标">学习目标</h2>
+<ul class="task-list">
+<li><label><input
+type="checkbox" />用”判缝准则”判断一段代码该放内核、插件还是租户</label></li>
+<li><label><input type="checkbox" />复述 Action
+引擎六步和三条内核铁律</label></li>
+<li><label><input type="checkbox" />说清 SPI
+七槽位的正确用法（验收清单，不是自动化承诺）</label></li>
+<li><label><input type="checkbox" />知道两个 CI
+门禁各守什么</label></li>
+</ul>
+<h2 id="题眼全课最重要的一句话">题眼（全课最重要的一句话）</h2>
+<blockquote>
+<p><strong>确定性边界置于模型之外：合法但违规的动作，在写后规则校验阶段被确定性回滚并留审计。</strong></p>
+</blockquote>
+<p>这句话回答了客户真正担心的问题：“AI
+会不会绕过你们的规则？”——<strong>答案是：它绕不过，因为边界不在它里面。</strong></p>
+<h2 id="一三层切分与判缝准则">一、三层切分与判缝准则</h2>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>层</th>
+<th>含行业词</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Kernel 内核</strong>（机制）</td>
+<td><strong>禁止</strong>（CI 脚本强制）</td>
+<td>元模型、Action 内核、规则引擎、回滚、审计、置信度</td>
+</tr>
+<tr class="even">
+<td><strong>Plugin 插件</strong>（策略）</td>
+<td>是（隔离在插件内）</td>
+<td>五要素 Schema、映射、规则函数、Action handler、Agent、CQ</td>
+</tr>
+<tr class="odd">
+<td><strong>Tenant 租户</strong>（实例）</td>
+<td>是（实例数据）</td>
+<td>物理映射、实例数据接入、密级授权</td>
+</tr>
+</tbody>
+</table>
+<p>内核与插件<strong>只通过 SDK
+通信——目录边界即红线</strong>。“本体即基础设施”：内核只懂本体怎么运转，<strong>不懂任何行业</strong>。</p>
+<p><strong>⭐
+判缝准则</strong>：拿一段代码问——“<strong>换成另一个行业（比如医疗），这段还成立吗？</strong>”成立
+→ 内核；不成立 → 插件；涉及具体数字 → 租户。</p>
+<h2 id="二-action-引擎治理写的唯一通路">二、⭐ Action
+引擎：治理写的唯一通路</h2>
+<h3 id="六步">六步</h3>
+<pre><code>1 guard 前置校验（参数 + 用户上下文 + 角色权限，不碰数据）
+2 validate 预演（可选，跑全套但永不落库）
+3 写入 overlay —— 写即可见
+4 写后规则校验 —— declarative + function 两层，收集全部违反
+5a 全过     → 异步 flush + 同事务落审计快照 + 副作用编排
+5b 任一 hard 违反 → 确定性回滚 + 返回结构化拒绝</code></pre>
+<h3 id="三条内核铁律">三条内核铁律</h3>
+<ol type="1">
+<li><strong>写后判</strong>：先写（到 overlay）再校验——操作系统的
+syscall
+校验的是”调用”，本体引擎校验的是”<strong>世界</strong>”（写完之后所有规则还成不成立）</li>
+<li><strong>判全部</strong>：收集全部违反，不是遇到第一个就短路</li>
+<li><strong>拒绝是数据</strong>：连”没权限”都返回结构化的 Violation
+而不是抛异常——<strong>在这个内核里，“拒绝”是一等公民的返回值</strong></li>
+</ol>
+<h3 id="action-普通-tool-calling">Action ≠ 普通 tool calling</h3>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th></th>
+<th>普通 tool calling</th>
+<th><strong>Action</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>谁决定成不成立</td>
+<td>模型决定调什么就执行什么</td>
+<td><strong>模型只能”申请”，引擎决定成不成立</strong></td>
+</tr>
+<tr class="even">
+<td>失败长什么样</td>
+<td>异常 / 一句报错文本</td>
+<td><strong>结构化拒绝</strong></td>
+</tr>
+<tr class="odd">
+<td>留痕</td>
+<td>看实现心情</td>
+<td><strong>强制审计快照（成功和被拒都有）</strong></td>
+</tr>
+</tbody>
+</table>
+<p><strong>一句可以拿去用的话术</strong>：客户问”你们的 AI
+会不会乱改数据”——<strong>“Agent
+只能申请，引擎决定。而且它申请的每一次，无论成败都有快照。”</strong></p>
+<h3 id="validate-预演给谁用跑全套但永不落库">validate
+预演给谁用（跑全套但永不落库）</h3>
+<ul>
+<li><strong>前端</strong>：让用户在点提交之前就看到”这么填会被拒”</li>
+<li><strong>Agent</strong>：先试一次，避免拿真实拒绝当学习信号</li>
+<li><strong>FDE</strong>：调规则时不用反复清数据</li>
+</ul>
+<h2 id="三spi-七槽位接一个新行业要交的七样">三、SPI
+七槽位：接一个新行业要交的七样</h2>
+<p>插件接口（SPI）定义了七样东西，<strong>但注意：实测编译产物只覆盖其中五格</strong>（两格完全不生成，两格只出骨架，一格格式不匹配）。</p>
+<blockquote>
+<p><strong>七槽位的正确用法：它是验收清单</strong>（插件齐不齐，照这七格逐个点）<strong>，不是自动化承诺。</strong>
+这张表本身就是”别信文档，去看代码”的活教材。</p>
+</blockquote>
+<h2 id="四ci-两个门禁守住换行业零改内核">四、CI
+两个门禁：守住”换行业零改内核”</h2>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>门禁</th>
+<th>执法方向</th>
+<th>一句话</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>check_kernel_purity.py</code></td>
+<td><strong>反向</strong>：内核源码禁止出现任何行业词</td>
+<td><strong>一个二十行的脚本，守住了整个产品的可复用性</strong></td>
+</tr>
+<tr class="even">
+<td><code>check_plugin_capabilities.py</code></td>
+<td><strong>正向</strong>：插件声明的能力与实现必须对齐</td>
+<td>防止插件声称能做实际没做的事</td>
+</tr>
+</tbody>
+</table>
+<h3 id="可以脱离本引擎复用的一条方法论">⭐
+可以脱离本引擎复用的一条方法论</h3>
+<p><strong>任何一条纪律，问一句：“它能被一个脚本检查吗？”</strong> 能 →
+固化成 CI，零人力永不疲劳；不能 →
+它现在还停留在”靠自觉”。（第八课的”固化三问”在这里的工程形态。）</p>
+<h2
+id="五诚实边界客户的技术负责人一定会问">五、诚实边界（客户的技术负责人一定会问）</h2>
+<p>演示拦截效果时必须一起报边界：测试覆盖了多少样本、哪些路径还没验。<strong>你先说，比被问出来强</strong>——这本身就是第一课讲的”可信度从哪来”。</p>
+<h2 id="自测">自测</h2>
+<ol type="1">
+<li>为什么规则在写入”之后”执行，而不是之前？（校验的是”世界”不是”调用”）</li>
+<li>“拒绝是数据”是什么意思？为什么重要？</li>
+<li>SPI 七槽位为什么不能当自动化承诺用？</li>
+<li>两个 CI 门禁各守什么方向？</li>
+</ol>
+<hr />
+<p><em>完整版见 <a
+href="https://finger999999.github.io/fde-course/课程/S2_本体引擎的工程实现.html">FDE
+课程中心 · S2</a></em></p>
+
+<script>
+(function () {
+  var heads = Array.prototype.filter.call(document.querySelectorAll("h1, h2, h3"), function (h) { return !h.closest("#title-block-header"); });
+  if (heads.length < 3) return;
+  var nav = document.createElement("nav");
+  nav.id = "fde-toc";
+  var html = '<div class="toc-title">本页目录</div>';
+  var links = [];
+  heads.forEach(function (h, i) {
+    if (!h.id) h.id = "fde-sec-" + i;
+    var cls = "toc-" + h.tagName.toLowerCase();
+    html += '<a class="' + cls + '" href="#' + h.id + '">' + h.textContent + "</a>";
+    links.push({ a: null, h: h });
+  });
+  html += '<div class="toc-back"><a href="../index.html">← 返回学习版首页</a></div>';
+  nav.innerHTML = html;
+  document.body.appendChild(nav);
+  var as = nav.querySelectorAll("a[href^='#']");
+  as.forEach(function (a, i) { links[i].a = a; });
+  function onScroll() {
+    var cur = 0;
+    links.forEach(function (l, i) {
+      if (l.h.getBoundingClientRect().top < 120) cur = i;
+    });
+    links.forEach(function (l, i) { l.a.classList.toggle("active", i === cur); });
+  }
+  window.addEventListener("scroll", onScroll, { passive: true });
+  onScroll();
+})();
+</script>
+</body>
+</html>

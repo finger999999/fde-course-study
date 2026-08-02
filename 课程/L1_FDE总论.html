@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>第一课 · FDE：是什么，为什么，怎么工作</title>
+  <style>
+    html {
+      color: #1a1a1a;
+      background-color: #fdfdfd;
+    }
+    body {
+      margin: 0 auto;
+      max-width: 36em;
+      padding-left: 50px;
+      padding-right: 50px;
+      padding-top: 50px;
+      padding-bottom: 50px;
+      hyphens: auto;
+      overflow-wrap: break-word;
+      text-rendering: optimizeLegibility;
+      font-kerning: normal;
+    }
+    @media (max-width: 600px) {
+      body {
+        font-size: 0.9em;
+        padding: 12px;
+      }
+      h1 {
+        font-size: 1.8em;
+      }
+    }
+    @media print {
+      html {
+        background-color: white;
+      }
+      body {
+        background-color: transparent;
+        color: black;
+        font-size: 12pt;
+      }
+      p, h2, h3 {
+        orphans: 3;
+        widows: 3;
+      }
+      h2, h3, h4 {
+        page-break-after: avoid;
+      }
+    }
+    p {
+      margin: 1em 0;
+    }
+    a {
+      color: #1a1a1a;
+    }
+    a:visited {
+      color: #1a1a1a;
+    }
+    img {
+      max-width: 100%;
+    }
+    svg {
+      height: auto;
+      max-width: 100%;
+    }
+    h1, h2, h3, h4, h5, h6 {
+      margin-top: 1.4em;
+    }
+    h5, h6 {
+      font-size: 1em;
+      font-style: italic;
+    }
+    h6 {
+      font-weight: normal;
+    }
+    ol, ul {
+      padding-left: 1.7em;
+      margin-top: 1em;
+    }
+    li > ol, li > ul {
+      margin-top: 0;
+    }
+    blockquote {
+      margin: 1em 0 1em 1.7em;
+      padding-left: 1em;
+      border-left: 2px solid #e6e6e6;
+      color: #606060;
+    }
+    code {
+      font-family: Menlo, Monaco, Consolas, 'Lucida Console', monospace;
+      font-size: 85%;
+      margin: 0;
+      hyphens: manual;
+    }
+    pre {
+      margin: 1em 0;
+      overflow: auto;
+    }
+    pre code {
+      padding: 0;
+      overflow: visible;
+      overflow-wrap: normal;
+    }
+    .sourceCode {
+     background-color: transparent;
+     overflow: visible;
+    }
+    hr {
+      background-color: #1a1a1a;
+      border: none;
+      height: 1px;
+      margin: 1em 0;
+    }
+    table {
+      margin: 1em 0;
+      border-collapse: collapse;
+      width: 100%;
+      overflow-x: auto;
+      display: block;
+      font-variant-numeric: lining-nums tabular-nums;
+    }
+    table caption {
+      margin-bottom: 0.75em;
+    }
+    tbody {
+      margin-top: 0.5em;
+      border-top: 1px solid #1a1a1a;
+      border-bottom: 1px solid #1a1a1a;
+    }
+    th {
+      border-top: 1px solid #1a1a1a;
+      padding: 0.25em 0.5em 0.25em 0.5em;
+    }
+    td {
+      padding: 0.125em 0.5em 0.25em 0.5em;
+    }
+    header {
+      margin-bottom: 4em;
+      text-align: center;
+    }
+    #TOC li {
+      list-style: none;
+    }
+    #TOC ul {
+      padding-left: 1.3em;
+    }
+    #TOC > ul {
+      padding-left: 0;
+    }
+    #TOC a:not(:hover) {
+      text-decoration: none;
+    }
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+  </style>
+
+<style id="fde-wide-layout-patch">
+/* ===== FDE 阅读优化样式 v4 ===== */
+html { font-size: 17px; }
+body {
+  font-family: -apple-system, "Segoe UI", "PingFang SC", "Hiragino Sans GB",
+               "Microsoft YaHei", "Source Han Sans SC", "Noto Sans CJK SC", sans-serif;
+  max-width: 42em; line-height: 1.85; color: #24292f;
+  padding: 24px 20px 64px; letter-spacing: .01em;
+}
+#title-block-header { display: none; }
+p { margin: 1.1em 0; }
+ul, ol { padding-left: 1.6em; margin: 1em 0; }
+li { margin: .35em 0; }
+h1, h2, h3, h4, h5, h6 { line-height: 1.4; color: #111827; scroll-margin-top: 16px; }
+h1 { font-size: 1.75em; margin: 0 0 .6em; padding-bottom: .4em; border-bottom: 2px solid #e5e7eb; }
+h2 {
+  font-size: 1.42em; margin: 2em 0 .9em; padding: .12em 0 .12em .6em;
+  border-left: 5px solid #2563eb; border-radius: 0 6px 6px 0;
+  background: linear-gradient(to right, #eff6ff, rgba(239,246,255,0));
+}
+h3 { font-size: 1.18em; margin: 1.6em 0 .7em; color: #1f2937; }
+h4 { font-size: 1.05em; margin: 1.4em 0 .6em; color: #374151; }
+a { color: #2563eb; text-decoration: none; }
+a:hover { text-decoration: underline; }
+blockquote {
+  margin: 1.2em 0; padding: .7em 1.2em; color: #374151;
+  background: #f8fafc; border-left: 4px solid #93c5fd; border-radius: 0 8px 8px 0;
+}
+blockquote p { margin: .5em 0; }
+code {
+  font-family: "Cascadia Code", Consolas, "Courier New", monospace;
+  font-size: .87em; background: rgba(175,184,193,.25); padding: .1em .4em; border-radius: 4px;
+}
+pre {
+  background: #f6f8fa; border: 1px solid #e5e7eb; border-radius: 8px;
+  padding: 14px 16px; overflow-x: auto; line-height: 1.6; margin: 1.2em 0;
+}
+pre code { background: transparent; padding: 0; font-size: .92em; }
+table { border-collapse: collapse; width: 100% !important; margin: 1.4em 0; font-size: .94em; }
+th, td { border: 1px solid #d0d7de; padding: 8px 12px; vertical-align: top; }
+th { background: #f2f4f7; font-weight: 600; }
+tbody tr:nth-child(even) td { background: #fafbfc; }
+hr { border: none; border-top: 1px solid #e5e7eb; margin: 2.4em 0; }
+img { max-width: 100%; border-radius: 6px; }
+#fde-toc {
+  display: none; position: fixed; left: 24px; top: 32px; width: 300px;
+  max-height: calc(100vh - 64px); overflow: auto; z-index: 10;
+  font-family: "Segoe UI", "Microsoft YaHei", "PingFang SC", sans-serif;
+  font-size: 14px; line-height: 1.55;
+  background: #fff; border: 1px solid #e5e7eb; border-radius: 10px;
+  padding: 14px 18px; box-shadow: 0 2px 12px rgba(0,0,0,.06);
+}
+#fde-toc .toc-title { font-weight: 700; color: #111827; margin-bottom: 8px; }
+#fde-toc a { display: block; color: #374151; text-decoration: none; padding: 2px 0; }
+#fde-toc a:hover { color: #2563eb; }
+#fde-toc a.active { color: #2563eb; font-weight: 600; }
+#fde-toc .toc-h1 { font-weight: 700; }
+#fde-toc .toc-h2 { margin-left: 10px; }
+#fde-toc .toc-h3 { margin-left: 24px; color: #6b7280; font-size: 13px; }
+#fde-toc .toc-back { margin-top: 10px; padding-top: 8px; border-top: 1px solid #e5e7eb; }
+@media (min-width: 1100px) {
+  html { font-size: 18px; background: #eceff3; }
+  body {
+    background: #fff; border-radius: 12px; box-shadow: 0 2px 18px rgba(15,23,42,.08);
+    margin: 28px auto 56px; padding: 40px 48px 64px;
+  }
+}
+@media (min-width: 1400px) {
+  body { margin-left: max(360px, calc(50vw - 21em + 74px)); margin-right: auto; }
+  #fde-toc { display: block; }
+}
+</style>
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">第一课 · FDE：是什么，为什么，怎么工作</h1>
+</header>
+<h1 id="第一课-fde是什么为什么怎么工作">第一课 ·
+FDE：是什么，为什么，怎么工作</h1>
+<blockquote>
+<p><strong>学习版说明</strong>：这是全课程的地基课。读完你应该能用大白话回答三个问题：FDE
+到底解决什么问题、人和 AI 各自干什么、五天学习按什么流程走。</p>
+</blockquote>
+<h2 id="学习目标">学习目标</h2>
+<ul class="task-list">
+<li><label><input
+type="checkbox" />说清什么是”交付断层”，为什么传统团队结构解决不了它</label></li>
+<li><label><input
+type="checkbox" />理解”一人公司（OPC）“的含义和它的边界</label></li>
+<li><label><input type="checkbox" />记住认知杠杆公式，知道 AI
+真正改变了什么、没改变什么</label></li>
+<li><label><input type="checkbox" /><strong>硬指标：能复述 SOP
+七阶段，并说出每阶段对应第几课</strong></label></li>
+</ul>
+<h2 id="一交付断层fde-要解决的根本问题">一、交付断层：FDE
+要解决的根本问题</h2>
+<p>想象一个典型项目的信息流：</p>
+<pre><code>客户 → 需求人员 → 设计人员 → 开发人员 → 交付人员</code></pre>
+<p>客户说”我的老人能被照顾好”。需求人员把它写成需求文档，设计人员画成蓝图，开发人员做成系统，交付人员交给客户。<strong>每一棒交接，都有一部分”只在上一个人脑子里、没写进文档”的东西永久丢失。</strong></p>
+<blockquote>
+<p><strong>客户要的是结果，组织给的是工序。</strong></p>
+</blockquote>
+<p>有人本能反应是”那文档写细一点不就行了？“——不行。因为断层不是某个人不认真，它是<strong>工序制的结构性产物</strong>：只要你把一件事切成四段交给四拨人，断层就一定存在，跟态度无关。</p>
+<p><strong>FDE
+的机制只有一句话：把需要跨四个人接力的判断链，压进一个人的头脑里连续走完。</strong>
+智能体（AI
+Agent）是这一个人的手脚，不是接力赛里的另一棒——它不接手判断，只放大执行。</p>
+<p>⚠️ <strong>一个常见误读要先掐掉：贯通 ≠ 求全。</strong> FDE
+不是”什么都自己做”，建模要服务于业务优先级。有项目把用户旅程建得巨细靡遗，结果返工——这个返工成本要记在”方法论用错了”的账上，不是”运气不好”。</p>
+<h2 id="二fde-一人公司opc但边界比能力半径更重要">二、FDE =
+一人公司（OPC），但边界比能力半径更重要</h2>
+<p>FDE 一个人能调动智能体编队完成过去 5
+人团队数周的活，所以叫”一人公司”。但<strong>一人公司不是让你逞能，是让你清楚地知道自己什么时候必须叫人。</strong></p>
+<h3 id="边界判据三问比背清单管用">边界判据三问（比背清单管用）</h3>
+<p>拿任何一件活，问三个问题：</p>
+<ol type="1">
+<li><strong>这件事需要一个身份才能做吗？</strong>（比如去某机构取一份文件）</li>
+<li><strong>这件事需要一个立场才能拍吗？</strong>（比如某个阈值定多少，是权衡不是计算）</li>
+<li><strong>这件事做错了谁负责？</strong></li>
+</ol>
+<p><strong>只要有一个答案指向”人”，这活就在”必须人扛侧”；做错了能回退重跑的，在”可替侧”（可以交给智能体）。</strong></p>
+<table>
+<thead>
+<tr class="header">
+<th>活</th>
+<th>判定</th>
+<th>原因</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>取一份需要人脉才能拿到的文件</td>
+<td>人扛</td>
+<td>需要身份</td>
+</tr>
+<tr class="even">
+<td>定一个影响速度的容错阈值</td>
+<td>人扛</td>
+<td>需要立场</td>
+</tr>
+<tr class="odd">
+<td>整理 102 个业务事件</td>
+<td>可替</td>
+<td>错了能回退重跑</td>
+</tr>
+<tr class="even">
+<td>生成 7 个域的骨架</td>
+<td>可替</td>
+<td>错了能回退重跑</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>C1–C6（技术能力）可训练，C7（人的部分）只能筛选。</strong>
+一个只会往前冲、不知道边界的 FDE，比一个慢一点但知道边界的 FDE
+危险得多——因为他会在查不到的地方编一个出来。</p>
+</blockquote>
+<h2 id="三认知杠杆ai-到底改变了什么">三、认知杠杆：AI
+到底改变了什么</h2>
+<h3 id="杠杆公式">杠杆公式</h3>
+<pre><code>产出 = 结构化能力 × 平台固化 × 模型算力</code></pre>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>因子</th>
+<th>谁提供</th>
+<th>缺了会怎样</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>结构化能力</strong></td>
+<td><strong>人</strong>（把模糊意图压成可执行结构）</td>
+<td>模型再强，也只是把你的模糊放大成一百页的模糊</td>
+</tr>
+<tr class="even">
+<td><strong>平台固化</strong></td>
+<td>工具链（如 Astra Studio）</td>
+<td>每个项目从零起，方法留在个人脑子里</td>
+</tr>
+<tr class="odd">
+<td>模型算力</td>
+<td>大模型</td>
+<td>——</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>难听话：三个因子里，唯一可以用钱买到的是模型算力，而多数人以为它是全部。</strong></p>
+</blockquote>
+<h3 id="vibe-coding-的真相">Vibe Coding 的真相</h3>
+<p>有人用 AI 辅助 3 小时手搓了一个本体引擎原型。他复盘”AI
+到底干了多少活”：</p>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>AI 能干的</th>
+<th>AI 不能干的</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>给了明确规格后，把伪代码变 Python</td>
+<td>规则该在写入前还是写入后执行？</td>
+</tr>
+<tr class="even">
+<td>处理文件读写、生成测试</td>
+<td>日志存快照还是只存变化？</td>
+</tr>
+<tr class="odd">
+<td><strong>共同特征：给明确规格，快速生成</strong></td>
+<td><strong>共同特征：工程判断，不是编码问题</strong></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>AI
+能把”想清楚的事”快速变成代码，但不能代替”想清楚”这件事本身。</strong></p>
+</blockquote>
+<p>没有蓝图的 Vibe Coding
+会失控——它会很流畅地生成一堆自洽的、错的东西。你省下的思考，最后都要用返工还回来。</p>
+<h2
+id="四别人家怎么落地学的是来源纪律">四、别人家怎么落地（学的是”来源纪律”）</h2>
+<p>Palantir 是 FDE 岗位的原产地；Delta、OpenAI、Anthropic
+等也有类似实践。但这一节真正要教的不是八卦：</p>
+<blockquote>
+<p><strong>当你要把外部实践当作论据时，你标注来源的严谨程度，等于你专业的可信程度。</strong></p>
+</blockquote>
+<p>很多网传数字（薪资、成功率、百分比）属于二手甚至未获证实的信息。<strong>如果你只抄一个数字不写口径，你就在制造错误。</strong>
+引用外部数据时，分清三档：一手可核验 / 二手转述 /
+未获证实——各标各的。</p>
+<h2 id="五能力模型-c1c7">五、能力模型 C1–C7</h2>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>维度</th>
+<th>内容</th>
+<th>在哪练</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>C1 认知萃取</td>
+<td>事件风暴 · 画像 · 旅程 · 热点</td>
+<td>第四课上</td>
+</tr>
+<tr class="even">
+<td>C2 结构建模</td>
+<td>DDD 限界上下文 + 五要素</td>
+<td>第四课下/第五课上</td>
+</tr>
+<tr class="odd">
+<td>C3 风险设闸</td>
+<td>人工介入点（HIL）设点原则</td>
+<td>第五课下</td>
+</tr>
+<tr class="even">
+<td>C4 合规治理</td>
+<td>依据取证 · 诚实边界</td>
+<td>第五课下/第六课</td>
+</tr>
+<tr class="odd">
+<td>C5 商业建模</td>
+<td>投资 / 收入 / IRR</td>
+<td>第六课</td>
+</tr>
+<tr class="even">
+<td>C6 交付物工程</td>
+<td>并行写作 · 装配质检</td>
+<td>第六/七课</td>
+</tr>
+<tr class="odd">
+<td><strong>C7 人的部分</strong></td>
+<td>客户关系 · 责任承担 · 价值判断</td>
+<td><strong>只能筛，不能训</strong></td>
+</tr>
+</tbody>
+</table>
+<p><strong>三级能力锚</strong>：Lv.1 见习（在指导下承接单一环节）→ Lv.2
+胜任（独立完成认知侧全链条，交付物需一次复核）→ Lv.3
+主理（主持项目、对客户承诺负责）。</p>
+<blockquote>
+<p>多数人第一次会停在 Lv.1，这是正常的。<strong>装作 Lv.2
+才是危险的。</strong></p>
+</blockquote>
+<h2 id="六-sop-七阶段本课落点硬指标">六、⭐ SOP
+七阶段（本课落点，硬指标）</h2>
+<table>
+<thead>
+<tr class="header">
+<th>阶段</th>
+<th>干什么</th>
+<th>对应课</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>立项</td>
+<td>把客户模糊意图变成可接住的输入</td>
+<td>第三课</td>
+</tr>
+<tr class="even">
+<td>S1 认知萃取</td>
+<td>事件 → 画像 → 旅程 → 热点</td>
+<td>第四课上</td>
+</tr>
+<tr class="odd">
+<td>S2 结构收敛</td>
+<td>事件归簇</td>
+<td>第四课下</td>
+</tr>
+<tr class="even">
+<td>S3 域切分</td>
+<td>切限界上下文</td>
+<td>第四课下</td>
+</tr>
+<tr class="odd">
+<td>S4 本体建模 + 设闸</td>
+<td>五要素 → 编译 → HIL</td>
+<td><strong>第五课（全课重心）</strong></td>
+</tr>
+<tr class="even">
+<td>S5 合规治理</td>
+<td>挂依据 / 留占位 / 转取证清单</td>
+<td>第五课下 + 第六课</td>
+</tr>
+<tr class="odd">
+<td>S6 交付物工程</td>
+<td>并行写作 → 装配 → 导出</td>
+<td>第六 + 七课</td>
+</tr>
+<tr class="even">
+<td>S7 HIL 运行留痕</td>
+<td>谁确认的、确认错什么代价</td>
+<td>横切全程</td>
+</tr>
+</tbody>
+</table>
+<p><strong>这条路上每一步都有一个”必须由人做的判断”。找到它，就是你要学的东西。</strong></p>
+<h2 id="三条贯穿全程的纪律">三条贯穿全程的纪律</h2>
+<ol type="1">
+<li><strong>产物没落盘就是没做</strong>——每一步都必须真跑工具。</li>
+<li><strong>案例只做标尺、不做模板</strong>——照结构做，别抄数字。</li>
+<li><strong>查不到的一律留占位、不编造</strong>——这是结课路演的一票警示。</li>
+</ol>
+<h2 id="自测">自测</h2>
+<ol type="1">
+<li>为什么”文档写细一点”补不上交付断层？（断层是结构性的，不是态度问题）</li>
+<li>边界判据三问是什么？（身份 / 立场 / 谁负责）</li>
+<li>杠杆公式里唯一能花钱买到的是哪个因子？（模型算力）</li>
+<li>复述 SOP 七阶段。（见第六节表格——答不出这条，第三课会迷路）</li>
+</ol>
+<hr />
+<p><em>完整版见 <a
+href="https://finger999999.github.io/fde-course/课程/L1_FDE总论.html">FDE
+课程中心 · L1</a></em></p>
+
+<script>
+(function () {
+  var heads = Array.prototype.filter.call(document.querySelectorAll("h1, h2, h3"), function (h) { return !h.closest("#title-block-header"); });
+  if (heads.length < 3) return;
+  var nav = document.createElement("nav");
+  nav.id = "fde-toc";
+  var html = '<div class="toc-title">本页目录</div>';
+  var links = [];
+  heads.forEach(function (h, i) {
+    if (!h.id) h.id = "fde-sec-" + i;
+    var cls = "toc-" + h.tagName.toLowerCase();
+    html += '<a class="' + cls + '" href="#' + h.id + '">' + h.textContent + "</a>";
+    links.push({ a: null, h: h });
+  });
+  html += '<div class="toc-back"><a href="../index.html">← 返回学习版首页</a></div>';
+  nav.innerHTML = html;
+  document.body.appendChild(nav);
+  var as = nav.querySelectorAll("a[href^='#']");
+  as.forEach(function (a, i) { links[i].a = a; });
+  function onScroll() {
+    var cur = 0;
+    links.forEach(function (l, i) {
+      if (l.h.getBoundingClientRect().top < 120) cur = i;
+    });
+    links.forEach(function (l, i) { l.a.classList.toggle("active", i === cur); });
+  }
+  window.addEventListener("scroll", onScroll, { passive: true });
+  onScroll();
+})();
+</script>
+</body>
+</html>

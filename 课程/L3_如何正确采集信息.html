@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>第三课 · 如何正确采集信息</title>
+  <style>
+    html {
+      color: #1a1a1a;
+      background-color: #fdfdfd;
+    }
+    body {
+      margin: 0 auto;
+      max-width: 36em;
+      padding-left: 50px;
+      padding-right: 50px;
+      padding-top: 50px;
+      padding-bottom: 50px;
+      hyphens: auto;
+      overflow-wrap: break-word;
+      text-rendering: optimizeLegibility;
+      font-kerning: normal;
+    }
+    @media (max-width: 600px) {
+      body {
+        font-size: 0.9em;
+        padding: 12px;
+      }
+      h1 {
+        font-size: 1.8em;
+      }
+    }
+    @media print {
+      html {
+        background-color: white;
+      }
+      body {
+        background-color: transparent;
+        color: black;
+        font-size: 12pt;
+      }
+      p, h2, h3 {
+        orphans: 3;
+        widows: 3;
+      }
+      h2, h3, h4 {
+        page-break-after: avoid;
+      }
+    }
+    p {
+      margin: 1em 0;
+    }
+    a {
+      color: #1a1a1a;
+    }
+    a:visited {
+      color: #1a1a1a;
+    }
+    img {
+      max-width: 100%;
+    }
+    svg {
+      height: auto;
+      max-width: 100%;
+    }
+    h1, h2, h3, h4, h5, h6 {
+      margin-top: 1.4em;
+    }
+    h5, h6 {
+      font-size: 1em;
+      font-style: italic;
+    }
+    h6 {
+      font-weight: normal;
+    }
+    ol, ul {
+      padding-left: 1.7em;
+      margin-top: 1em;
+    }
+    li > ol, li > ul {
+      margin-top: 0;
+    }
+    blockquote {
+      margin: 1em 0 1em 1.7em;
+      padding-left: 1em;
+      border-left: 2px solid #e6e6e6;
+      color: #606060;
+    }
+    code {
+      font-family: Menlo, Monaco, Consolas, 'Lucida Console', monospace;
+      font-size: 85%;
+      margin: 0;
+      hyphens: manual;
+    }
+    pre {
+      margin: 1em 0;
+      overflow: auto;
+    }
+    pre code {
+      padding: 0;
+      overflow: visible;
+      overflow-wrap: normal;
+    }
+    .sourceCode {
+     background-color: transparent;
+     overflow: visible;
+    }
+    hr {
+      background-color: #1a1a1a;
+      border: none;
+      height: 1px;
+      margin: 1em 0;
+    }
+    table {
+      margin: 1em 0;
+      border-collapse: collapse;
+      width: 100%;
+      overflow-x: auto;
+      display: block;
+      font-variant-numeric: lining-nums tabular-nums;
+    }
+    table caption {
+      margin-bottom: 0.75em;
+    }
+    tbody {
+      margin-top: 0.5em;
+      border-top: 1px solid #1a1a1a;
+      border-bottom: 1px solid #1a1a1a;
+    }
+    th {
+      border-top: 1px solid #1a1a1a;
+      padding: 0.25em 0.5em 0.25em 0.5em;
+    }
+    td {
+      padding: 0.125em 0.5em 0.25em 0.5em;
+    }
+    header {
+      margin-bottom: 4em;
+      text-align: center;
+    }
+    #TOC li {
+      list-style: none;
+    }
+    #TOC ul {
+      padding-left: 1.3em;
+    }
+    #TOC > ul {
+      padding-left: 0;
+    }
+    #TOC a:not(:hover) {
+      text-decoration: none;
+    }
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+  </style>
+
+<style id="fde-wide-layout-patch">
+/* ===== FDE 阅读优化样式 v4 ===== */
+html { font-size: 17px; }
+body {
+  font-family: -apple-system, "Segoe UI", "PingFang SC", "Hiragino Sans GB",
+               "Microsoft YaHei", "Source Han Sans SC", "Noto Sans CJK SC", sans-serif;
+  max-width: 42em; line-height: 1.85; color: #24292f;
+  padding: 24px 20px 64px; letter-spacing: .01em;
+}
+#title-block-header { display: none; }
+p { margin: 1.1em 0; }
+ul, ol { padding-left: 1.6em; margin: 1em 0; }
+li { margin: .35em 0; }
+h1, h2, h3, h4, h5, h6 { line-height: 1.4; color: #111827; scroll-margin-top: 16px; }
+h1 { font-size: 1.75em; margin: 0 0 .6em; padding-bottom: .4em; border-bottom: 2px solid #e5e7eb; }
+h2 {
+  font-size: 1.42em; margin: 2em 0 .9em; padding: .12em 0 .12em .6em;
+  border-left: 5px solid #2563eb; border-radius: 0 6px 6px 0;
+  background: linear-gradient(to right, #eff6ff, rgba(239,246,255,0));
+}
+h3 { font-size: 1.18em; margin: 1.6em 0 .7em; color: #1f2937; }
+h4 { font-size: 1.05em; margin: 1.4em 0 .6em; color: #374151; }
+a { color: #2563eb; text-decoration: none; }
+a:hover { text-decoration: underline; }
+blockquote {
+  margin: 1.2em 0; padding: .7em 1.2em; color: #374151;
+  background: #f8fafc; border-left: 4px solid #93c5fd; border-radius: 0 8px 8px 0;
+}
+blockquote p { margin: .5em 0; }
+code {
+  font-family: "Cascadia Code", Consolas, "Courier New", monospace;
+  font-size: .87em; background: rgba(175,184,193,.25); padding: .1em .4em; border-radius: 4px;
+}
+pre {
+  background: #f6f8fa; border: 1px solid #e5e7eb; border-radius: 8px;
+  padding: 14px 16px; overflow-x: auto; line-height: 1.6; margin: 1.2em 0;
+}
+pre code { background: transparent; padding: 0; font-size: .92em; }
+table { border-collapse: collapse; width: 100% !important; margin: 1.4em 0; font-size: .94em; }
+th, td { border: 1px solid #d0d7de; padding: 8px 12px; vertical-align: top; }
+th { background: #f2f4f7; font-weight: 600; }
+tbody tr:nth-child(even) td { background: #fafbfc; }
+hr { border: none; border-top: 1px solid #e5e7eb; margin: 2.4em 0; }
+img { max-width: 100%; border-radius: 6px; }
+#fde-toc {
+  display: none; position: fixed; left: 24px; top: 32px; width: 300px;
+  max-height: calc(100vh - 64px); overflow: auto; z-index: 10;
+  font-family: "Segoe UI", "Microsoft YaHei", "PingFang SC", sans-serif;
+  font-size: 14px; line-height: 1.55;
+  background: #fff; border: 1px solid #e5e7eb; border-radius: 10px;
+  padding: 14px 18px; box-shadow: 0 2px 12px rgba(0,0,0,.06);
+}
+#fde-toc .toc-title { font-weight: 700; color: #111827; margin-bottom: 8px; }
+#fde-toc a { display: block; color: #374151; text-decoration: none; padding: 2px 0; }
+#fde-toc a:hover { color: #2563eb; }
+#fde-toc a.active { color: #2563eb; font-weight: 600; }
+#fde-toc .toc-h1 { font-weight: 700; }
+#fde-toc .toc-h2 { margin-left: 10px; }
+#fde-toc .toc-h3 { margin-left: 24px; color: #6b7280; font-size: 13px; }
+#fde-toc .toc-back { margin-top: 10px; padding-top: 8px; border-top: 1px solid #e5e7eb; }
+@media (min-width: 1100px) {
+  html { font-size: 18px; background: #eceff3; }
+  body {
+    background: #fff; border-radius: 12px; box-shadow: 0 2px 18px rgba(15,23,42,.08);
+    margin: 28px auto 56px; padding: 40px 48px 64px;
+  }
+}
+@media (min-width: 1400px) {
+  body { margin-left: max(360px, calc(50vw - 21em + 74px)); margin-right: auto; }
+  #fde-toc { display: block; }
+}
+</style>
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">第三课 · 如何正确采集信息</h1>
+</header>
+<h1 id="第三课-如何正确采集信息">第三课 · 如何正确采集信息</h1>
+<blockquote>
+<p><strong>学习版说明</strong>：这是唯一一个”错了之后无法在下游补救”的环节。环境装错了能重装，域切错了能返工，但信息在源头丢了、歪了，后面每一步都在错误的地基上精雕细琢——<strong>而且没人知道它曾经存在过</strong>。</p>
+</blockquote>
+<h2 id="学习目标">学习目标</h2>
+<ul class="task-list">
+<li><label><input
+type="checkbox" />画出信息衰减链，说清每个工具防的是哪一道衰减</label></li>
+<li><label><input
+type="checkbox" />区分”全”和”准”两个标准，知道为什么”不准”更危险</label></li>
+<li><label><input
+type="checkbox" />会用两类模板（A/B），并产出一份三层齐全的
+<code>_INPUT.md</code> 输入包</label></li>
+</ul>
+<h2 id="一信息衰减链本课的总地图">一、信息衰减链（本课的总地图）</h2>
+<pre><code>客户脑子里的 → 客户说出来的 → 你听到的 → 你记下来的 → 你写进模板的 → 智能体读到的
+   ①隐含前提    ②表述能力     ③注意力      ④转译损失     ⑤结构化损失    ⑥理解偏差</code></pre>
+<p><strong>六道衰减。本课的每一个工具，都是在其中某一道上设的保真措施。</strong></p>
+<blockquote>
+<p><strong>难听话</strong>：交付失败十有八九不是败在建模或写作，是败在<strong>第一次和客户谈完之后，你以为你听懂了</strong>。</p>
+</blockquote>
+<h2 id="二两个标准全-准">二、两个标准：全 ≠ 准</h2>
+<table>
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>标准</th>
+<th>定义</th>
+<th>靠什么保证</th>
+<th>失败长什么样</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>全</strong></td>
+<td>该问的都问了</td>
+<td>checklist（覆盖度）</td>
+<td>后面突然冒出一个没人考虑过的约束</td>
+</tr>
+<tr class="even">
+<td><strong>准</strong></td>
+<td>客户原话没被你的转译污染</td>
+<td>原话留存（保真度）</td>
+<td>所有推导都建立在你的误解上，<strong>而且看起来很自洽</strong></td>
+</tr>
+</tbody>
+</table>
+<p>⭐ <strong>不准比不全更危险：漏了会暴露，歪了不会。</strong>
+漏掉的东西迟早会撞出来；理解歪了的东西，会一路顺畅地长成一整套自洽的错误方案——直到评审那天才爆。</p>
+<h2
+id="三六个工具每个对应衰减链上的一环">三、六个工具（每个对应衰减链上的一环）</h2>
+<h3 id="工具①-电梯演讲防你以为你懂了">工具① ·
+电梯演讲（防”你以为你懂了”）</h3>
+<p>30
+秒四句话说清这个项目。<strong>判据不是”说得好听”，是邻组能不能复述回来。</strong>
+客户皱眉 = 你当场就发现了偏差，而不是三周后。</p>
+<h3 id="工具②-5w2h-覆盖-checklist保全">工具② · 5W2H 覆盖
+checklist（保”全”）</h3>
+<p>Who / What / When / Where / Why / How / How
+much——<strong>七项缺一，就是”不全”</strong>。答不上来的项标”待客户确认”，最怕的是缺项而不自知。</p>
+<h3 id="工具③-利益相关者地图保全里最容易漏的一块">工具③ ·
+利益相关者地图（保”全”里最容易漏的一块）</h3>
+<p>四栏：谁出钱 / 谁使用 / 谁验收 /
+<strong>谁反对</strong>。“谁反对”必须问——把反对者提前识别出来，等于在流程里提前设了一道闸。</p>
+<h3 id="工具④-原话留存保准">工具④ · 原话留存（保”准”）</h3>
+<p>客户的原话进”事实层”，<strong>你的转译不许混进去</strong>。“用户需要土壤检测功能”是你的转译；用户原话可能是”地里该不该浇水，我心里没底”——里面的约束完全不同。</p>
+<h3 id="工具⑤-两类模板先判用哪类">工具⑤ · 两类模板（先判用哪类）</h3>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th></th>
+<th>模板 A · 平台立项型</th>
+<th>模板 B · 大模型能力型</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>适用</td>
+<td>有运营盘的平台项目（→ 多半模式二）</td>
+<td>大模型能力/应用类（→ 多半模式一）</td>
+</tr>
+<tr class="even">
+<td>结构</td>
+<td>六段：概览 / 角色 / 价值 / 商业模式 / 拓展 / 名称</td>
+<td>定位 / 用户及场景 / 数据需求 / 能力边界等</td>
+</tr>
+</tbody>
+</table>
+<p><strong>最常见的判断错误：只写 B 不写 A。</strong>
+角色只列”用户”“管理员”是软件角色不是业务角色，画像必然空洞。价值写”提升效率、降低成本”
+= 不可量化 = 财务测算那步直接断链。</p>
+<p>⚠️ <strong>复用模板的红线（反例
+B-11）</strong>：有项目把另一个模板的数字整段带过来——模板结构可以复用，<strong>数字不可以</strong>。数字无主
+= 编造，<strong>比空缺更有害</strong>，这是结课路演的一票警示。</p>
+<h3 id="工具⑥-_input.md-输入包本课落点">工具⑥ · <code>_INPUT.md</code>
+输入包（本课落点 ⭐）</h3>
+<p>把采集到的一切压成三层，第四课直接喂给智能体：</p>
+<pre><code>① 事实层：客户原话摘录（不加工）
+② 口径层：术语表 · 关键数字（唯一真相源，下游一律引用不重算）· 禁用词 · 成熟度标注
+③ 任务层：要做什么 · 产出格式 · 不许做什么（必须有禁令）</code></pre>
+<p><strong>只有事实层 = 只完成了三分之一。</strong>
+口径层缺了，第四课跑出来的画像会空洞、术语每次都不一样；任务层没禁令，智能体就会自由发挥。</p>
+<h2 id="四checkout-关键项">四、checkout 关键项</h2>
+<ul class="task-list">
+<li><label><input type="checkbox" />模板选型说得出理由（A / B /
+A+B）</label></li>
+<li><label><input type="checkbox" />价值段至少 1
+处带数字（时间/人力/金额），且<strong>每个数字能答”是谁的、从哪来”</strong></label></li>
+<li><label><input
+type="checkbox" />输入包三层齐全，任务层有”不许做什么”</label></li>
+<li><label><input type="checkbox" />每类用户的典型提问 ≥10
+条，且是原话不是转译</label></li>
+<li><label><input
+type="checkbox" />拿不准的地方标”待客户确认”，没有把猜测写成客户需求</label></li>
+</ul>
+<blockquote>
+<p>你说不清”谁在什么时候因为什么做了什么动作”、也列不出”他会怎么问”，<strong>就还没有项目，只有一个愿望。别把愿望丢给智能体，它会很客气地帮你把愿望写成
+100 页。</strong></p>
+</blockquote>
+<h2 id="自测">自测</h2>
+<ol type="1">
+<li>为什么”不准”比”不全”更危险？（漏了会暴露，歪了会自洽地长到最后）</li>
+<li>利益相关者地图最容易漏哪一栏？（谁反对）</li>
+<li>输入包哪三层？缺口径层会怎样？</li>
+<li>B-11 反例错在哪？（复用模板时把数字一起带过来 = 编造）</li>
+</ol>
+<hr />
+<p><em>完整版见 <a
+href="https://finger999999.github.io/fde-course/课程/L3_如何正确采集信息.html">FDE
+课程中心 · L3</a></em></p>
+
+<script>
+(function () {
+  var heads = Array.prototype.filter.call(document.querySelectorAll("h1, h2, h3"), function (h) { return !h.closest("#title-block-header"); });
+  if (heads.length < 3) return;
+  var nav = document.createElement("nav");
+  nav.id = "fde-toc";
+  var html = '<div class="toc-title">本页目录</div>';
+  var links = [];
+  heads.forEach(function (h, i) {
+    if (!h.id) h.id = "fde-sec-" + i;
+    var cls = "toc-" + h.tagName.toLowerCase();
+    html += '<a class="' + cls + '" href="#' + h.id + '">' + h.textContent + "</a>";
+    links.push({ a: null, h: h });
+  });
+  html += '<div class="toc-back"><a href="../index.html">← 返回学习版首页</a></div>';
+  nav.innerHTML = html;
+  document.body.appendChild(nav);
+  var as = nav.querySelectorAll("a[href^='#']");
+  as.forEach(function (a, i) { links[i].a = a; });
+  function onScroll() {
+    var cur = 0;
+    links.forEach(function (l, i) {
+      if (l.h.getBoundingClientRect().top < 120) cur = i;
+    });
+    links.forEach(function (l, i) { l.a.classList.toggle("active", i === cur); });
+  }
+  window.addEventListener("scroll", onScroll, { passive: true });
+  onScroll();
+})();
+</script>
+</body>
+</html>

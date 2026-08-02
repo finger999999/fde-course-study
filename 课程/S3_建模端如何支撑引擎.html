@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>专题课 S3 · 建模端如何支撑引擎（studio-ontology）</title>
+  <style>
+    html {
+      color: #1a1a1a;
+      background-color: #fdfdfd;
+    }
+    body {
+      margin: 0 auto;
+      max-width: 36em;
+      padding-left: 50px;
+      padding-right: 50px;
+      padding-top: 50px;
+      padding-bottom: 50px;
+      hyphens: auto;
+      overflow-wrap: break-word;
+      text-rendering: optimizeLegibility;
+      font-kerning: normal;
+    }
+    @media (max-width: 600px) {
+      body {
+        font-size: 0.9em;
+        padding: 12px;
+      }
+      h1 {
+        font-size: 1.8em;
+      }
+    }
+    @media print {
+      html {
+        background-color: white;
+      }
+      body {
+        background-color: transparent;
+        color: black;
+        font-size: 12pt;
+      }
+      p, h2, h3 {
+        orphans: 3;
+        widows: 3;
+      }
+      h2, h3, h4 {
+        page-break-after: avoid;
+      }
+    }
+    p {
+      margin: 1em 0;
+    }
+    a {
+      color: #1a1a1a;
+    }
+    a:visited {
+      color: #1a1a1a;
+    }
+    img {
+      max-width: 100%;
+    }
+    svg {
+      height: auto;
+      max-width: 100%;
+    }
+    h1, h2, h3, h4, h5, h6 {
+      margin-top: 1.4em;
+    }
+    h5, h6 {
+      font-size: 1em;
+      font-style: italic;
+    }
+    h6 {
+      font-weight: normal;
+    }
+    ol, ul {
+      padding-left: 1.7em;
+      margin-top: 1em;
+    }
+    li > ol, li > ul {
+      margin-top: 0;
+    }
+    blockquote {
+      margin: 1em 0 1em 1.7em;
+      padding-left: 1em;
+      border-left: 2px solid #e6e6e6;
+      color: #606060;
+    }
+    code {
+      font-family: Menlo, Monaco, Consolas, 'Lucida Console', monospace;
+      font-size: 85%;
+      margin: 0;
+      hyphens: manual;
+    }
+    pre {
+      margin: 1em 0;
+      overflow: auto;
+    }
+    pre code {
+      padding: 0;
+      overflow: visible;
+      overflow-wrap: normal;
+    }
+    .sourceCode {
+     background-color: transparent;
+     overflow: visible;
+    }
+    hr {
+      background-color: #1a1a1a;
+      border: none;
+      height: 1px;
+      margin: 1em 0;
+    }
+    table {
+      margin: 1em 0;
+      border-collapse: collapse;
+      width: 100%;
+      overflow-x: auto;
+      display: block;
+      font-variant-numeric: lining-nums tabular-nums;
+    }
+    table caption {
+      margin-bottom: 0.75em;
+    }
+    tbody {
+      margin-top: 0.5em;
+      border-top: 1px solid #1a1a1a;
+      border-bottom: 1px solid #1a1a1a;
+    }
+    th {
+      border-top: 1px solid #1a1a1a;
+      padding: 0.25em 0.5em 0.25em 0.5em;
+    }
+    td {
+      padding: 0.125em 0.5em 0.25em 0.5em;
+    }
+    header {
+      margin-bottom: 4em;
+      text-align: center;
+    }
+    #TOC li {
+      list-style: none;
+    }
+    #TOC ul {
+      padding-left: 1.3em;
+    }
+    #TOC > ul {
+      padding-left: 0;
+    }
+    #TOC a:not(:hover) {
+      text-decoration: none;
+    }
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+  </style>
+
+<style id="fde-wide-layout-patch">
+/* ===== FDE 阅读优化样式 v4 ===== */
+html { font-size: 17px; }
+body {
+  font-family: -apple-system, "Segoe UI", "PingFang SC", "Hiragino Sans GB",
+               "Microsoft YaHei", "Source Han Sans SC", "Noto Sans CJK SC", sans-serif;
+  max-width: 42em; line-height: 1.85; color: #24292f;
+  padding: 24px 20px 64px; letter-spacing: .01em;
+}
+#title-block-header { display: none; }
+p { margin: 1.1em 0; }
+ul, ol { padding-left: 1.6em; margin: 1em 0; }
+li { margin: .35em 0; }
+h1, h2, h3, h4, h5, h6 { line-height: 1.4; color: #111827; scroll-margin-top: 16px; }
+h1 { font-size: 1.75em; margin: 0 0 .6em; padding-bottom: .4em; border-bottom: 2px solid #e5e7eb; }
+h2 {
+  font-size: 1.42em; margin: 2em 0 .9em; padding: .12em 0 .12em .6em;
+  border-left: 5px solid #2563eb; border-radius: 0 6px 6px 0;
+  background: linear-gradient(to right, #eff6ff, rgba(239,246,255,0));
+}
+h3 { font-size: 1.18em; margin: 1.6em 0 .7em; color: #1f2937; }
+h4 { font-size: 1.05em; margin: 1.4em 0 .6em; color: #374151; }
+a { color: #2563eb; text-decoration: none; }
+a:hover { text-decoration: underline; }
+blockquote {
+  margin: 1.2em 0; padding: .7em 1.2em; color: #374151;
+  background: #f8fafc; border-left: 4px solid #93c5fd; border-radius: 0 8px 8px 0;
+}
+blockquote p { margin: .5em 0; }
+code {
+  font-family: "Cascadia Code", Consolas, "Courier New", monospace;
+  font-size: .87em; background: rgba(175,184,193,.25); padding: .1em .4em; border-radius: 4px;
+}
+pre {
+  background: #f6f8fa; border: 1px solid #e5e7eb; border-radius: 8px;
+  padding: 14px 16px; overflow-x: auto; line-height: 1.6; margin: 1.2em 0;
+}
+pre code { background: transparent; padding: 0; font-size: .92em; }
+table { border-collapse: collapse; width: 100% !important; margin: 1.4em 0; font-size: .94em; }
+th, td { border: 1px solid #d0d7de; padding: 8px 12px; vertical-align: top; }
+th { background: #f2f4f7; font-weight: 600; }
+tbody tr:nth-child(even) td { background: #fafbfc; }
+hr { border: none; border-top: 1px solid #e5e7eb; margin: 2.4em 0; }
+img { max-width: 100%; border-radius: 6px; }
+#fde-toc {
+  display: none; position: fixed; left: 24px; top: 32px; width: 300px;
+  max-height: calc(100vh - 64px); overflow: auto; z-index: 10;
+  font-family: "Segoe UI", "Microsoft YaHei", "PingFang SC", sans-serif;
+  font-size: 14px; line-height: 1.55;
+  background: #fff; border: 1px solid #e5e7eb; border-radius: 10px;
+  padding: 14px 18px; box-shadow: 0 2px 12px rgba(0,0,0,.06);
+}
+#fde-toc .toc-title { font-weight: 700; color: #111827; margin-bottom: 8px; }
+#fde-toc a { display: block; color: #374151; text-decoration: none; padding: 2px 0; }
+#fde-toc a:hover { color: #2563eb; }
+#fde-toc a.active { color: #2563eb; font-weight: 600; }
+#fde-toc .toc-h1 { font-weight: 700; }
+#fde-toc .toc-h2 { margin-left: 10px; }
+#fde-toc .toc-h3 { margin-left: 24px; color: #6b7280; font-size: 13px; }
+#fde-toc .toc-back { margin-top: 10px; padding-top: 8px; border-top: 1px solid #e5e7eb; }
+@media (min-width: 1100px) {
+  html { font-size: 18px; background: #eceff3; }
+  body {
+    background: #fff; border-radius: 12px; box-shadow: 0 2px 18px rgba(15,23,42,.08);
+    margin: 28px auto 56px; padding: 40px 48px 64px;
+  }
+}
+@media (min-width: 1400px) {
+  body { margin-left: max(360px, calc(50vw - 21em + 74px)); margin-right: auto; }
+  #fde-toc { display: block; }
+}
+</style>
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">专题课 S3 · 建模端如何支撑引擎（studio-ontology）</h1>
+</header>
+<h1 id="专题课-s3-建模端如何支撑引擎studio-ontology">专题课 S3 ·
+建模端如何支撑引擎（studio-ontology）</h1>
+<blockquote>
+<p><strong>学习版说明</strong>：S2 讲了引擎内核怎么造，S3
+讲怎么给它”编译应用”——那么严格的一套内核，怎么才能在几天之内为一个新行业填出插件？答案在建模端。读完
+S1→S2→S3，第五课（亲手用工具产出插件）就是水到渠成。</p>
+</blockquote>
+<h2 id="学习目标">学习目标</h2>
+<ul class="task-list">
+<li><label><input
+type="checkbox" />说清为什么必须有建模端（为什么不能直接手写插件）</label></li>
+<li><label><input type="checkbox" />画出”两仓一条流水线”，知道 IR
+存在的全部理由</label></li>
+<li><label><input type="checkbox" />理解那个强制停点 ⏸
+为什么必须存在</label></li>
+<li><label><input
+type="checkbox" />区分”设计上的克制”与”能力上的边界”</label></li>
+</ul>
+<h2 id="一为什么要有建模端">一、为什么要有建模端</h2>
+<p>S2
+的内核很严格——严格是好事，但<strong>严格的东西通常也难填</strong>。直接手写插件有三个结构性问题：</p>
+<ol type="1">
+<li><strong>手写的前提是”你已经知道要写什么”</strong>——而新项目一开始你恰恰不知道</li>
+<li><strong>业务专家看不懂
+Python</strong>——规则要业务方确认，但他们读不了代码</li>
+<li><strong>手写没有一致性保证</strong>——十个人写出十种结构</li>
+</ol>
+<blockquote>
+<p><strong>所以中间必须有一份业务专家能读、能改、能确认的东西——这就是
+IR（中间表示）存在的全部理由。</strong></p>
+</blockquote>
+<h2 id="二两仓一条流水线">二、两仓一条流水线</h2>
+<pre><code>astra-studio（建模工作室，另仓）          clife-onto-engine（运行时内核）
+┌─────────────────────────────┐        ┌──────────────────┐
+│ ① 业务分析（Intake 契约）     │        │                  │
+│ ② 五要素 IR 七段             │  编译   │  插件包           │
+│ ③ 编译产物 + 人工收尾         │ ─────▶ │  （引擎加载执行）  │
+└─────────────────────────────┘        └──────────────────┘</code></pre>
+<p><strong>这个工具最聪明的地方</strong>：它没有让业务团队学一套新语言，而是<strong>站在业务团队已经会的
+DDD 上，做一层翻译</strong>（DDD 概念 ↔︎
+五要素有对照表）。你在客户现场做的事件风暴，不是白做的中间品——<strong>它就是编译器的输入</strong>。</p>
+<h3 id="ir-七段与-fde-核心">IR 七段与 ★FDE 核心</h3>
+<p>IR 共七段（对象 / 关系 / 函数 / <strong>规则</strong> / 动作 /
+数据来源 / 能力问题 CQ），其中 <strong>§4 Rules 段标着”★FDE
+核心”</strong>——业务规则是整套本体里最值钱、也最需要人判断的部分。</p>
+<h2 id="三-四命令与唯一的强制停点">三、⭐ 四命令与唯一的强制停点</h2>
+<table>
+<thead>
+<tr class="header">
+<th>命令</th>
+<th>干什么</th>
+<th>强制人审</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>map</code></td>
+<td>业务分析 → 七段 IR</td>
+<td>无</td>
+</tr>
+<tr class="even">
+<td><code>compile</code></td>
+<td>IR → 插件骨架</td>
+<td>无（已存在不覆盖，只告警）</td>
+</tr>
+<tr class="odd">
+<td><code>validate</code></td>
+<td>四段校验</td>
+<td>无（只诊断）</td>
+</tr>
+<tr class="even">
+<td><strong><code>model</code></strong></td>
+<td><strong>map → ⏸ 你审 IR → compile</strong></td>
+<td><strong>★唯一有强制停点</strong></td>
+</tr>
+</tbody>
+</table>
+<h3 id="停点审四项">停点审四项</h3>
+<p>对象边界 / 关系语义 / <strong>规则的 severity·backing·出处</strong> /
+Action 的写入与人工介入点。<strong>你可以直接改 md
+文件再继续。</strong></p>
+<blockquote>
+<p><strong>那个 ⏸
+为什么必须存在？因为本体是治理的锚点——一份没有人确认过的治理基准，不是治理基准。</strong></p>
+</blockquote>
+<p><strong>另一处”权限即职责”的设计</strong>：<code>validate</code>
+校验器<strong>无权改代码</strong>——它只能告诉你哪里不合格，不能替你抹平。这是”纪律靠机制不靠自觉”的又一个干净例子。</p>
+<h2 id="四-诚实边界本课最值钱的一节">四、⭐
+诚实边界（本课最值钱的一节）</h2>
+<p>编译产物不是成品。机器负责把结构立起来，<strong>人负责把判断填进去</strong>：</p>
+<ul>
+<li><strong>function 规则的函数体、Action 回写逻辑、参考数据</strong>是
+FDE 的手艺活——产物里用 <code>TODO(FDE)</code> 和
+<code>NotImplementedError</code> <strong>显式标注</strong></li>
+<li>一个项目留了 121 处
+<code>NotImplementedError</code>——<strong>这不是没做完，是明确划出”机器到此为止、人从这里接手”的界线</strong></li>
+<li><strong>一个不敢留 NotImplementedError 的
+FDE，会让模型把它猜的业务规则写成看起来能跑的代码——那才是灾难</strong></li>
+</ul>
+<p><strong>两个必须分清的概念</strong>：</p>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th></th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>设计上的克制</strong></td>
+<td>刻意不自动生成（规则体留人填），因为判断必须人来出</td>
+</tr>
+<tr class="even">
+<td><strong>能力上的边界</strong></td>
+<td>工具暂时做不到</td>
+</tr>
+</tbody>
+</table>
+<p>另外要知道的结构性事实：<strong>IR 七段只覆盖 SPI
+七槽位中的五格</strong>——那两个 ❌
+是<strong>结构性缺口</strong>，不是”待补功能”。验收标准：编译产物的五要素与手写插件<strong>同构</strong>。</p>
+<h2 id="五-两仓红线">五、⚠️ 两仓红线</h2>
+<ul>
+<li>业务数据/名录<strong>不许写进插件仓</strong>（真实数据走租户目录）</li>
+<li>引擎与插件只通过 SDK 通信，<strong>目录边界即红线</strong></li>
+</ul>
+<h2 id="六s1s2s3第五课的关系">六、S1→S2→S3→第五课的关系</h2>
+<table>
+<thead>
+<tr class="header">
+<th>课</th>
+<th>回答什么</th>
+<th>给你什么</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>S1</strong></td>
+<td>本体<strong>是什么</strong>、为什么必须有</td>
+<td>判断力</td>
+</tr>
+<tr class="even">
+<td><strong>S2</strong></td>
+<td>引擎<strong>怎么造</strong>（运行时端）</td>
+<td>骨架认知</td>
+</tr>
+<tr class="odd">
+<td><strong>S3</strong></td>
+<td><strong>怎么给它编译应用</strong>（建模端）</td>
+<td>那把工具，以及它的边界</td>
+</tr>
+<tr class="even">
+<td><strong>L5</strong></td>
+<td><strong>亲手用那把工具</strong>，产出能在引擎上跑起来的插件</td>
+<td>手艺</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>只上一门的话，上 S1——工具会换，那套判断不会。</p>
+</blockquote>
+<h2 id="自测">自测</h2>
+<ol type="1">
+<li>IR 存在的全部理由是什么？（业务专家能读、能改、能确认）</li>
+<li>四命令里哪个有强制停点？停点审哪四项？</li>
+<li>“设计上的克制”和”能力上的边界”有什么区别？各举一例。</li>
+<li>建模端的验收标准是什么？（与手写插件五要素同构）</li>
+</ol>
+<hr />
+<p><em>完整版见 <a
+href="https://finger999999.github.io/fde-course/课程/S3_建模端如何支撑引擎.html">FDE
+课程中心 · S3</a></em></p>
+
+<script>
+(function () {
+  var heads = Array.prototype.filter.call(document.querySelectorAll("h1, h2, h3"), function (h) { return !h.closest("#title-block-header"); });
+  if (heads.length < 3) return;
+  var nav = document.createElement("nav");
+  nav.id = "fde-toc";
+  var html = '<div class="toc-title">本页目录</div>';
+  var links = [];
+  heads.forEach(function (h, i) {
+    if (!h.id) h.id = "fde-sec-" + i;
+    var cls = "toc-" + h.tagName.toLowerCase();
+    html += '<a class="' + cls + '" href="#' + h.id + '">' + h.textContent + "</a>";
+    links.push({ a: null, h: h });
+  });
+  html += '<div class="toc-back"><a href="../index.html">← 返回学习版首页</a></div>';
+  nav.innerHTML = html;
+  document.body.appendChild(nav);
+  var as = nav.querySelectorAll("a[href^='#']");
+  as.forEach(function (a, i) { links[i].a = a; });
+  function onScroll() {
+    var cur = 0;
+    links.forEach(function (l, i) {
+      if (l.h.getBoundingClientRect().top < 120) cur = i;
+    });
+    links.forEach(function (l, i) { l.a.classList.toggle("active", i === cur); });
+  }
+  window.addEventListener("scroll", onScroll, { passive: true });
+  onScroll();
+})();
+</script>
+</body>
+</html>

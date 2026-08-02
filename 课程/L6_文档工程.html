@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>第六课 · 文档工程</title>
+  <style>
+    html {
+      color: #1a1a1a;
+      background-color: #fdfdfd;
+    }
+    body {
+      margin: 0 auto;
+      max-width: 36em;
+      padding-left: 50px;
+      padding-right: 50px;
+      padding-top: 50px;
+      padding-bottom: 50px;
+      hyphens: auto;
+      overflow-wrap: break-word;
+      text-rendering: optimizeLegibility;
+      font-kerning: normal;
+    }
+    @media (max-width: 600px) {
+      body {
+        font-size: 0.9em;
+        padding: 12px;
+      }
+      h1 {
+        font-size: 1.8em;
+      }
+    }
+    @media print {
+      html {
+        background-color: white;
+      }
+      body {
+        background-color: transparent;
+        color: black;
+        font-size: 12pt;
+      }
+      p, h2, h3 {
+        orphans: 3;
+        widows: 3;
+      }
+      h2, h3, h4 {
+        page-break-after: avoid;
+      }
+    }
+    p {
+      margin: 1em 0;
+    }
+    a {
+      color: #1a1a1a;
+    }
+    a:visited {
+      color: #1a1a1a;
+    }
+    img {
+      max-width: 100%;
+    }
+    svg {
+      height: auto;
+      max-width: 100%;
+    }
+    h1, h2, h3, h4, h5, h6 {
+      margin-top: 1.4em;
+    }
+    h5, h6 {
+      font-size: 1em;
+      font-style: italic;
+    }
+    h6 {
+      font-weight: normal;
+    }
+    ol, ul {
+      padding-left: 1.7em;
+      margin-top: 1em;
+    }
+    li > ol, li > ul {
+      margin-top: 0;
+    }
+    blockquote {
+      margin: 1em 0 1em 1.7em;
+      padding-left: 1em;
+      border-left: 2px solid #e6e6e6;
+      color: #606060;
+    }
+    code {
+      font-family: Menlo, Monaco, Consolas, 'Lucida Console', monospace;
+      font-size: 85%;
+      margin: 0;
+      hyphens: manual;
+    }
+    pre {
+      margin: 1em 0;
+      overflow: auto;
+    }
+    pre code {
+      padding: 0;
+      overflow: visible;
+      overflow-wrap: normal;
+    }
+    .sourceCode {
+     background-color: transparent;
+     overflow: visible;
+    }
+    hr {
+      background-color: #1a1a1a;
+      border: none;
+      height: 1px;
+      margin: 1em 0;
+    }
+    table {
+      margin: 1em 0;
+      border-collapse: collapse;
+      width: 100%;
+      overflow-x: auto;
+      display: block;
+      font-variant-numeric: lining-nums tabular-nums;
+    }
+    table caption {
+      margin-bottom: 0.75em;
+    }
+    tbody {
+      margin-top: 0.5em;
+      border-top: 1px solid #1a1a1a;
+      border-bottom: 1px solid #1a1a1a;
+    }
+    th {
+      border-top: 1px solid #1a1a1a;
+      padding: 0.25em 0.5em 0.25em 0.5em;
+    }
+    td {
+      padding: 0.125em 0.5em 0.25em 0.5em;
+    }
+    header {
+      margin-bottom: 4em;
+      text-align: center;
+    }
+    #TOC li {
+      list-style: none;
+    }
+    #TOC ul {
+      padding-left: 1.3em;
+    }
+    #TOC > ul {
+      padding-left: 0;
+    }
+    #TOC a:not(:hover) {
+      text-decoration: none;
+    }
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+  </style>
+
+<style id="fde-wide-layout-patch">
+/* ===== FDE 阅读优化样式 v4 ===== */
+html { font-size: 17px; }
+body {
+  font-family: -apple-system, "Segoe UI", "PingFang SC", "Hiragino Sans GB",
+               "Microsoft YaHei", "Source Han Sans SC", "Noto Sans CJK SC", sans-serif;
+  max-width: 42em; line-height: 1.85; color: #24292f;
+  padding: 24px 20px 64px; letter-spacing: .01em;
+}
+#title-block-header { display: none; }
+p { margin: 1.1em 0; }
+ul, ol { padding-left: 1.6em; margin: 1em 0; }
+li { margin: .35em 0; }
+h1, h2, h3, h4, h5, h6 { line-height: 1.4; color: #111827; scroll-margin-top: 16px; }
+h1 { font-size: 1.75em; margin: 0 0 .6em; padding-bottom: .4em; border-bottom: 2px solid #e5e7eb; }
+h2 {
+  font-size: 1.42em; margin: 2em 0 .9em; padding: .12em 0 .12em .6em;
+  border-left: 5px solid #2563eb; border-radius: 0 6px 6px 0;
+  background: linear-gradient(to right, #eff6ff, rgba(239,246,255,0));
+}
+h3 { font-size: 1.18em; margin: 1.6em 0 .7em; color: #1f2937; }
+h4 { font-size: 1.05em; margin: 1.4em 0 .6em; color: #374151; }
+a { color: #2563eb; text-decoration: none; }
+a:hover { text-decoration: underline; }
+blockquote {
+  margin: 1.2em 0; padding: .7em 1.2em; color: #374151;
+  background: #f8fafc; border-left: 4px solid #93c5fd; border-radius: 0 8px 8px 0;
+}
+blockquote p { margin: .5em 0; }
+code {
+  font-family: "Cascadia Code", Consolas, "Courier New", monospace;
+  font-size: .87em; background: rgba(175,184,193,.25); padding: .1em .4em; border-radius: 4px;
+}
+pre {
+  background: #f6f8fa; border: 1px solid #e5e7eb; border-radius: 8px;
+  padding: 14px 16px; overflow-x: auto; line-height: 1.6; margin: 1.2em 0;
+}
+pre code { background: transparent; padding: 0; font-size: .92em; }
+table { border-collapse: collapse; width: 100% !important; margin: 1.4em 0; font-size: .94em; }
+th, td { border: 1px solid #d0d7de; padding: 8px 12px; vertical-align: top; }
+th { background: #f2f4f7; font-weight: 600; }
+tbody tr:nth-child(even) td { background: #fafbfc; }
+hr { border: none; border-top: 1px solid #e5e7eb; margin: 2.4em 0; }
+img { max-width: 100%; border-radius: 6px; }
+#fde-toc {
+  display: none; position: fixed; left: 24px; top: 32px; width: 300px;
+  max-height: calc(100vh - 64px); overflow: auto; z-index: 10;
+  font-family: "Segoe UI", "Microsoft YaHei", "PingFang SC", sans-serif;
+  font-size: 14px; line-height: 1.55;
+  background: #fff; border: 1px solid #e5e7eb; border-radius: 10px;
+  padding: 14px 18px; box-shadow: 0 2px 12px rgba(0,0,0,.06);
+}
+#fde-toc .toc-title { font-weight: 700; color: #111827; margin-bottom: 8px; }
+#fde-toc a { display: block; color: #374151; text-decoration: none; padding: 2px 0; }
+#fde-toc a:hover { color: #2563eb; }
+#fde-toc a.active { color: #2563eb; font-weight: 600; }
+#fde-toc .toc-h1 { font-weight: 700; }
+#fde-toc .toc-h2 { margin-left: 10px; }
+#fde-toc .toc-h3 { margin-left: 24px; color: #6b7280; font-size: 13px; }
+#fde-toc .toc-back { margin-top: 10px; padding-top: 8px; border-top: 1px solid #e5e7eb; }
+@media (min-width: 1100px) {
+  html { font-size: 18px; background: #eceff3; }
+  body {
+    background: #fff; border-radius: 12px; box-shadow: 0 2px 18px rgba(15,23,42,.08);
+    margin: 28px auto 56px; padding: 40px 48px 64px;
+  }
+}
+@media (min-width: 1400px) {
+  body { margin-left: max(360px, calc(50vw - 21em + 74px)); margin-right: auto; }
+  #fde-toc { display: block; }
+}
+</style>
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">第六课 · 文档工程</h1>
+</header>
+<h1 id="第六课-文档工程">第六课 · 文档工程</h1>
+<blockquote>
+<p><strong>学习版说明</strong>：让 10
+个作者写出来像一个人写的。并行写作的全部难点不在”写”，在”不打架”。本课把三块知识捆在一起：商业与财务、交付物工程、合规治理——<strong>多数技术出身的人不是倒在建模，是倒在这三栈</strong>。</p>
+</blockquote>
+<h2 id="学习目标">学习目标</h2>
+<ul class="task-list">
+<li><label><input type="checkbox" />用对两套财务语言（模式一 vs
+模式二），知道答反的代价</label></li>
+<li><label><input
+type="checkbox" />说出并行写作三条铁律，以及它们如何被工具强制执行</label></li>
+<li><label><input
+type="checkbox" />合规写作会用”三态诚实”，知道为什么错文号比空缺更有害</label></li>
+</ul>
+<h2 id="一商业与财务两套语言别答反">一、商业与财务：两套语言别答反</h2>
+<h3 id="商业模式设计五件套速览">商业模式设计五件套（速览）</h3>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>框架</th>
+<th>一句话记法</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>商业模式画布</td>
+<td>9 个模块一张图，和客户对齐”这生意怎么转”</td>
+</tr>
+<tr class="even">
+<td>交叉补贴</td>
+<td>想清楚”<strong>谁被补贴、谁来买单</strong>”</td>
+</tr>
+<tr class="odd">
+<td>三级火箭</td>
+<td>高频免费入口 → 沉淀用户 →
+低频高价变现；<strong>一级不赚钱，要有人扛得住</strong></td>
+</tr>
+<tr class="even">
+<td>SaaS 指标体系</td>
+<td><strong>LTV:CAC ≥ 3:1</strong>、NRR &gt; 100%、Rule of 40</td>
+</tr>
+<tr class="odd">
+<td>增长思维</td>
+<td>北极星指标：全公司只对齐一个</td>
+</tr>
+</tbody>
+</table>
+<h3 id="财务语言随交付模式变本课最关键的一条">⭐
+财务语言随交付模式变（本课最关键的一条）</h3>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>交付模式</th>
+<th>该用的语言</th>
+<th>别用错</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>模式二 · 平台建设+运营（重资产、投建运）</td>
+<td>投资估算 / EBITDA / <strong>IRR / NPV / 回本周期</strong></td>
+<td>别用 MRR——它不是订阅</td>
+</tr>
+<tr class="even">
+<td>模式一 · Token 计费 SaaS（轻资产、按量）</td>
+<td><strong>MRR/ARR / LTV:CAC / NRR / Rule of 40</strong></td>
+<td>别用 IRR——SaaS 早期没有”回本年”</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>一句话记死</strong>：客户问模式二的项目，你答”IRR 15%、第 9
+年回本”；客户问模式一的 SaaS，你答”LTV:CAC 3:1、NRR
+120%“。<strong>答反了，客户当场就知道你没做过这类生意。</strong></p>
+</blockquote>
+<p>另一个坑：看到两个不一致的数字（比如 15.2% 和
+8.7%），第一反应不该是”数据打架”然后自己去改一个——<strong>先查来源和口径</strong>，擅自改数就是踩反例
+B-5。</p>
+<h2
+id="二交付物工程并行写作三条铁律">二、交付物工程：并行写作三条铁律</h2>
+<p><strong>1. 口径单点</strong>——所有数字锚在一份 BRIEF
+文件里，分节作者<strong>一律引用、不重算</strong>。反例：同一个指标跨章节用了两个统计口径，不是笔误，是没建立”单一真相源”的纪律。</p>
+<p><strong>2.
+编号权归装配</strong>——写作阶段只管本章内部，跨章节的图表编号一律由装配阶段统一重排。</p>
+<p><strong>3.
+占位符即契约</strong>——文件标识（slug）必须先定后写，<strong>不可事后改名</strong>；摘要里的数字和明细表必须有单一真相源。</p>
+<blockquote>
+<p><strong>三条铁律都不是”建议”，是被工具执行的</strong>——这就是”平台 =
+方法论固化物”最具体的一次兑现。</p>
+</blockquote>
+<h3 id="流水线">流水线</h3>
+<pre><code>plan（规划章节，确认点会告诉你哪些章节没料可写）
+  → write（事实内容一律来自 artifacts，禁止编造统计数字、文号、预算）
+  → assemble（装配 + 编号 + 质量报告）
+  → 导出（pandoc，硬依赖）</code></pre>
+<h2 id="三合规治理三态诚实">三、合规治理：三态诚实</h2>
+<p>写每一条涉规论断时，三选一：</p>
+<table>
+<thead>
+<tr class="header">
+<th>情况</th>
+<th>怎么写</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>查到了<strong>现行有效</strong>的依据</td>
+<td>挂标准号 + 文号</td>
+</tr>
+<tr class="even">
+<td>是常识</td>
+<td>标”通用”</td>
+</tr>
+<tr class="odd">
+<td><strong>查不到</strong></td>
+<td><strong>留占位 + 锚定上位依据 + 转取证清单</strong></td>
+</tr>
+</tbody>
+</table>
+<p>真实项目的做法：18 处挂已核验依据，11
+处坚决保留”待补”占位——每处锚定上位依据、转成逐项取件的清单。</p>
+<blockquote>
+<p><strong>错文号比空缺更有害（B-10）</strong>：空缺是诚实的，能被后续补上；错误的文号是有毒的——它会以”看起来完整”的样子骗过审核，在检查那天爆炸。
+<strong>已废止的依据比查不到更危险（B-6），因为它看起来完全合规。</strong>
+硬动作：引用任何标准/法规前，先到官方平台核”现行/废止”状态。</p>
+</blockquote>
+<h2
+id="四九个翻车点照文档做也会撞知道有这回事">四、九个翻车点（照文档做也会撞，知道有这回事）</h2>
+<p>导出链缺
+pandoc、模板变量没填、图片占位没替换、编号冲突、格式质检和内容质检是<strong>两条独立的线</strong>——都得自己走一遍（B-4）。完整清单见完整版手册第十一节。</p>
+<h2 id="小结必记">小结（必记）</h2>
+<ol type="1">
+<li>财务语言两套：模式二讲 IRR/回本，模式一讲
+MRR/LTV:CAC——<strong>答反当场露怯</strong></li>
+<li>三条铁律：口径单点 / 编号权归装配 / 占位符即契约</li>
+<li>合规三态：有据挂依据 / 常识标”通用” / 查不到留占位转清单</li>
+<li><strong>本课交出去的东西会被评审、会进合同、会被审计——前面几步做错还能改，这一步做错是要负责的</strong></li>
+</ol>
+<h2 id="自测">自测</h2>
+<ol type="1">
+<li>你的命题是模式一还是模式二？该用哪套财务语言？</li>
+<li>并行写作为什么”编号权归装配”？</li>
+<li>查不到的依据该怎么处理？为什么不能编一个看起来像的？</li>
+</ol>
+<hr />
+<p><em>完整版见 <a
+href="https://finger999999.github.io/fde-course/课程/L6_文档工程.html">FDE
+课程中心 · L6</a></em></p>
+
+<script>
+(function () {
+  var heads = Array.prototype.filter.call(document.querySelectorAll("h1, h2, h3"), function (h) { return !h.closest("#title-block-header"); });
+  if (heads.length < 3) return;
+  var nav = document.createElement("nav");
+  nav.id = "fde-toc";
+  var html = '<div class="toc-title">本页目录</div>';
+  var links = [];
+  heads.forEach(function (h, i) {
+    if (!h.id) h.id = "fde-sec-" + i;
+    var cls = "toc-" + h.tagName.toLowerCase();
+    html += '<a class="' + cls + '" href="#' + h.id + '">' + h.textContent + "</a>";
+    links.push({ a: null, h: h });
+  });
+  html += '<div class="toc-back"><a href="../index.html">← 返回学习版首页</a></div>';
+  nav.innerHTML = html;
+  document.body.appendChild(nav);
+  var as = nav.querySelectorAll("a[href^='#']");
+  as.forEach(function (a, i) { links[i].a = a; });
+  function onScroll() {
+    var cur = 0;
+    links.forEach(function (l, i) {
+      if (l.h.getBoundingClientRect().top < 120) cur = i;
+    });
+    links.forEach(function (l, i) { l.a.classList.toggle("active", i === cur); });
+  }
+  window.addEventListener("scroll", onScroll, { passive: true });
+  onScroll();
+})();
+</script>
+</body>
+</html>

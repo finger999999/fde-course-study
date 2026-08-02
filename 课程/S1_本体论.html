@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>专题课 S1 · 本体论：从数据到世界模型</title>
+  <style>
+    html {
+      color: #1a1a1a;
+      background-color: #fdfdfd;
+    }
+    body {
+      margin: 0 auto;
+      max-width: 36em;
+      padding-left: 50px;
+      padding-right: 50px;
+      padding-top: 50px;
+      padding-bottom: 50px;
+      hyphens: auto;
+      overflow-wrap: break-word;
+      text-rendering: optimizeLegibility;
+      font-kerning: normal;
+    }
+    @media (max-width: 600px) {
+      body {
+        font-size: 0.9em;
+        padding: 12px;
+      }
+      h1 {
+        font-size: 1.8em;
+      }
+    }
+    @media print {
+      html {
+        background-color: white;
+      }
+      body {
+        background-color: transparent;
+        color: black;
+        font-size: 12pt;
+      }
+      p, h2, h3 {
+        orphans: 3;
+        widows: 3;
+      }
+      h2, h3, h4 {
+        page-break-after: avoid;
+      }
+    }
+    p {
+      margin: 1em 0;
+    }
+    a {
+      color: #1a1a1a;
+    }
+    a:visited {
+      color: #1a1a1a;
+    }
+    img {
+      max-width: 100%;
+    }
+    svg {
+      height: auto;
+      max-width: 100%;
+    }
+    h1, h2, h3, h4, h5, h6 {
+      margin-top: 1.4em;
+    }
+    h5, h6 {
+      font-size: 1em;
+      font-style: italic;
+    }
+    h6 {
+      font-weight: normal;
+    }
+    ol, ul {
+      padding-left: 1.7em;
+      margin-top: 1em;
+    }
+    li > ol, li > ul {
+      margin-top: 0;
+    }
+    blockquote {
+      margin: 1em 0 1em 1.7em;
+      padding-left: 1em;
+      border-left: 2px solid #e6e6e6;
+      color: #606060;
+    }
+    code {
+      font-family: Menlo, Monaco, Consolas, 'Lucida Console', monospace;
+      font-size: 85%;
+      margin: 0;
+      hyphens: manual;
+    }
+    pre {
+      margin: 1em 0;
+      overflow: auto;
+    }
+    pre code {
+      padding: 0;
+      overflow: visible;
+      overflow-wrap: normal;
+    }
+    .sourceCode {
+     background-color: transparent;
+     overflow: visible;
+    }
+    hr {
+      background-color: #1a1a1a;
+      border: none;
+      height: 1px;
+      margin: 1em 0;
+    }
+    table {
+      margin: 1em 0;
+      border-collapse: collapse;
+      width: 100%;
+      overflow-x: auto;
+      display: block;
+      font-variant-numeric: lining-nums tabular-nums;
+    }
+    table caption {
+      margin-bottom: 0.75em;
+    }
+    tbody {
+      margin-top: 0.5em;
+      border-top: 1px solid #1a1a1a;
+      border-bottom: 1px solid #1a1a1a;
+    }
+    th {
+      border-top: 1px solid #1a1a1a;
+      padding: 0.25em 0.5em 0.25em 0.5em;
+    }
+    td {
+      padding: 0.125em 0.5em 0.25em 0.5em;
+    }
+    header {
+      margin-bottom: 4em;
+      text-align: center;
+    }
+    #TOC li {
+      list-style: none;
+    }
+    #TOC ul {
+      padding-left: 1.3em;
+    }
+    #TOC > ul {
+      padding-left: 0;
+    }
+    #TOC a:not(:hover) {
+      text-decoration: none;
+    }
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+  </style>
+
+<style id="fde-wide-layout-patch">
+/* ===== FDE 阅读优化样式 v4 ===== */
+html { font-size: 17px; }
+body {
+  font-family: -apple-system, "Segoe UI", "PingFang SC", "Hiragino Sans GB",
+               "Microsoft YaHei", "Source Han Sans SC", "Noto Sans CJK SC", sans-serif;
+  max-width: 42em; line-height: 1.85; color: #24292f;
+  padding: 24px 20px 64px; letter-spacing: .01em;
+}
+#title-block-header { display: none; }
+p { margin: 1.1em 0; }
+ul, ol { padding-left: 1.6em; margin: 1em 0; }
+li { margin: .35em 0; }
+h1, h2, h3, h4, h5, h6 { line-height: 1.4; color: #111827; scroll-margin-top: 16px; }
+h1 { font-size: 1.75em; margin: 0 0 .6em; padding-bottom: .4em; border-bottom: 2px solid #e5e7eb; }
+h2 {
+  font-size: 1.42em; margin: 2em 0 .9em; padding: .12em 0 .12em .6em;
+  border-left: 5px solid #2563eb; border-radius: 0 6px 6px 0;
+  background: linear-gradient(to right, #eff6ff, rgba(239,246,255,0));
+}
+h3 { font-size: 1.18em; margin: 1.6em 0 .7em; color: #1f2937; }
+h4 { font-size: 1.05em; margin: 1.4em 0 .6em; color: #374151; }
+a { color: #2563eb; text-decoration: none; }
+a:hover { text-decoration: underline; }
+blockquote {
+  margin: 1.2em 0; padding: .7em 1.2em; color: #374151;
+  background: #f8fafc; border-left: 4px solid #93c5fd; border-radius: 0 8px 8px 0;
+}
+blockquote p { margin: .5em 0; }
+code {
+  font-family: "Cascadia Code", Consolas, "Courier New", monospace;
+  font-size: .87em; background: rgba(175,184,193,.25); padding: .1em .4em; border-radius: 4px;
+}
+pre {
+  background: #f6f8fa; border: 1px solid #e5e7eb; border-radius: 8px;
+  padding: 14px 16px; overflow-x: auto; line-height: 1.6; margin: 1.2em 0;
+}
+pre code { background: transparent; padding: 0; font-size: .92em; }
+table { border-collapse: collapse; width: 100% !important; margin: 1.4em 0; font-size: .94em; }
+th, td { border: 1px solid #d0d7de; padding: 8px 12px; vertical-align: top; }
+th { background: #f2f4f7; font-weight: 600; }
+tbody tr:nth-child(even) td { background: #fafbfc; }
+hr { border: none; border-top: 1px solid #e5e7eb; margin: 2.4em 0; }
+img { max-width: 100%; border-radius: 6px; }
+#fde-toc {
+  display: none; position: fixed; left: 24px; top: 32px; width: 300px;
+  max-height: calc(100vh - 64px); overflow: auto; z-index: 10;
+  font-family: "Segoe UI", "Microsoft YaHei", "PingFang SC", sans-serif;
+  font-size: 14px; line-height: 1.55;
+  background: #fff; border: 1px solid #e5e7eb; border-radius: 10px;
+  padding: 14px 18px; box-shadow: 0 2px 12px rgba(0,0,0,.06);
+}
+#fde-toc .toc-title { font-weight: 700; color: #111827; margin-bottom: 8px; }
+#fde-toc a { display: block; color: #374151; text-decoration: none; padding: 2px 0; }
+#fde-toc a:hover { color: #2563eb; }
+#fde-toc a.active { color: #2563eb; font-weight: 600; }
+#fde-toc .toc-h1 { font-weight: 700; }
+#fde-toc .toc-h2 { margin-left: 10px; }
+#fde-toc .toc-h3 { margin-left: 24px; color: #6b7280; font-size: 13px; }
+#fde-toc .toc-back { margin-top: 10px; padding-top: 8px; border-top: 1px solid #e5e7eb; }
+@media (min-width: 1100px) {
+  html { font-size: 18px; background: #eceff3; }
+  body {
+    background: #fff; border-radius: 12px; box-shadow: 0 2px 18px rgba(15,23,42,.08);
+    margin: 28px auto 56px; padding: 40px 48px 64px;
+  }
+}
+@media (min-width: 1400px) {
+  body { margin-left: max(360px, calc(50vw - 21em + 74px)); margin-right: auto; }
+  #fde-toc { display: block; }
+}
+</style>
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">专题课 S1 · 本体论：从数据到世界模型</h1>
+</header>
+<h1 id="专题课-s1-本体论从数据到世界模型">专题课 S1 ·
+本体论：从数据到世界模型</h1>
+<blockquote>
+<p><strong>学习版说明</strong>：第五课的方法论前置，纯讲解。如果你只上一门专题课，上这门——<strong>工具会换，这套判断不会</strong>。读完你应该能回答：为什么光有数据和
+AI 还不够，“本体”到底补上了哪块缺失。</p>
+</blockquote>
+<h2 id="学习目标">学习目标</h2>
+<ul class="task-list">
+<li><label><input type="checkbox" />用”字典 vs
+物理引擎”解释本体补上了什么</label></li>
+<li><label><input type="checkbox" />画出四层架构，说清本体在哪一层、AI
+看到的世界长什么样</label></li>
+<li><label><input type="checkbox" />说清幻觉的真正成因，以及 OAG
+三层能力缺一不可</label></li>
+<li><label><input type="checkbox" />记住四层分工：Harness
+管循环，本体管世界</label></li>
+</ul>
+<h2
+id="一我们缺少的不是数据而是本体">一、我们缺少的不是数据，而是本体</h2>
+<p>有公司上了承诺”消灭数据孤岛”的大系统，结果差点把公司送进深渊——讽刺的是，他们的数据从来就不少。缺的是另一样东西：</p>
+<blockquote>
+<p><strong>谁依赖谁、谁触发谁、谁约束谁。系统记录了结果，没有记录”法则”。</strong></p>
+</blockquote>
+<h3 id="字典-vs-物理引擎本课第一个心智模型">⭐ 字典 vs
+物理引擎（本课第一个心智模型）</h3>
+<p>数据库像一本<strong>字典</strong>：它记录名词——“库存
+500”“订单状态：已发货”。但字典是死的，它不记录<strong>物理定律</strong>——“原料缺货
+→ 产线停产 → 订单违约 →
+赔款”这条传导链，数据库里没有任何一行能告诉你。</p>
+<blockquote>
+<p><strong>数据是事实的存档，本体是现实的法则。没有法则，再多的事实也只是一堆彼此不相识的数字。</strong></p>
+</blockquote>
+<p><strong>本体的核心价值，是让这些”活的规则”像数据一样被存储、被管理、被查询。</strong></p>
+<h2 id="二本体在架构里的位置">二、本体在架构里的位置</h2>
+<h3 id="幻觉的真正成因">幻觉的真正成因</h3>
+<p>大模型给的答案，外行读起来头头是道，内行读起来胡说八道。<strong>这不是模型在概率上算错了，而是它根本没有接触过那条约束它行为的”业务规则”</strong>——比如合同里写着”这类采购必须两人复核”，模型没撒谎，它只是不知道那条条款的存在。</p>
+<p>所以防幻觉要靠<strong>系统层面的确定性拦截</strong>，不能靠 prompt
+工程、不能靠模型的”理解能力”。商业场景不接受”我以为”。</p>
+<h3 id="四层架构本体在-l3">四层架构：本体在 L3</h3>
+<pre><code>L4 业务消费层     AI Agent · 业务应用 · 决策看板
+                    ↑ 只通过本体接口交互，不直接访问底层数据库
+L3 业务本体平台    Object（对象）· Link（关系）· Action（操作）
+                    ★ 数据层和应用层之间的语义枢纽
+L2 数据仓库/数据湖  结构化事实数据，但没有业务语义
+L1 源系统          ERP · CRM · 生产控制 · IoT——割裂的、异构的</code></pre>
+<p>L3
+不重新存储数据，它在数据之上建立<strong>语义模型</strong>：向下拉取 L2
+的干净数据，向上为 L4 提供<strong>受约束的操作接口</strong>。</p>
+<blockquote>
+<p><strong>这个架构的重要意义：AI
+看到的世界，是被本体层”翻译”过的世界——它看到的不是原始表，而是有名字、有关系、有规则的业务对象。</strong></p>
+</blockquote>
+<p>数据中台做的是 L2
+的事：管数据的流动，<strong>不管业务的逻辑</strong>。如果 AI
+能直接写入系统而中间没有业务规则层约束它，出问题只是时间问题。</p>
+<h3 id="两条给架构师的原则">两条给架构师的原则</h3>
+<ol type="1">
+<li><strong>业务规则应该是一等公民</strong>——不是散落在代码里的条件判断，而是可以被查询、被审计、被
+AI 读取的结构化资产</li>
+<li><strong>AI 与业务系统之间需要一个中间层</strong>——不是 prompt
+模板，而是真实的业务语义模型，带约束、带权限、带写回能力</li>
+</ol>
+<h2 id="三-oag-三层能力缺一不可">三、⭐ OAG 三层能力（缺一不可）</h2>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>能力</th>
+<th>回答的问题</th>
+<th>缺了会怎样</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>操作发现</strong></td>
+<td>Agent 怎么知道<strong>能做什么</strong>、参数是什么</td>
+<td>—</td>
+</tr>
+<tr class="even">
+<td><strong>执行约束</strong></td>
+<td>违规操作怎么被<strong>实时拦截</strong></td>
+<td>只有发现没有约束 = 和让 AI 直连数据库一样危险</td>
+</tr>
+<tr class="odd">
+<td><strong>决策追溯</strong></td>
+<td>三个月后怎么回答”<strong>为什么这样做</strong>”</td>
+<td>出了事无法审计，没人敢负责</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>OAG 不是 RAG 的升级版，是 Agent
+进入”写操作时代”的必要基础设施。</strong> RAG
+解决”从材料中找相关信息”（<strong>读</strong>）；OAG
+解决”基于这些信息修改企业系统”（<strong>改世界</strong>）。 GraphRAG
+这类技术属于”读”的一边——它帮模型更好地理解实体关系，但不提供受治理的写回路径，挡不住”写错”。</p>
+</blockquote>
+<h2 id="四ai-fde-为什么能-work">四、AI FDE 为什么能 work</h2>
+<p><strong>大模型负责生成候选，本体负责收敛候选。</strong> AI
+生成得越快，如果没有收敛机制，污染也越快。AI FDE 之所以能
+work，不是因为模型突然懂了企业，而是因为<strong>它运行在一个已经把企业世界结构化的模型上</strong>——这里的关键词不是
+AI，是 Engineer。</p>
+<h3 id="一句话记住四层分工">⭐ 一句话记住四层分工</h3>
+<pre><code>Harness（线束）      管循环——谁先跑、失败回哪步、重试几次
+Ontology（本体）     管世界——有哪些对象、哪些规则算数、哪些能写回
+Promotion Gate      管写回——什么结果允许落入正式系统
+Memory Pipeline     管下轮怎么读——记忆怎么更新</code></pre>
+<p><strong>为什么这个分层重要</strong>：出问题时你必须能判断是路由错了、规则错了、上下文拼错了、还是
+Agent 输出错了。<strong>层次混在一起，排查成本指数级上升。</strong></p>
+<h3 id="建模顺序铁律">建模顺序铁律</h3>
+<p><strong>先建模、再看数据——顺序不能反。</strong>
+先看数据会被现有系统结构带偏，建出”系统长什么样”，而非”业务是什么样”。</p>
+<h2 id="自测">自测</h2>
+<ol type="1">
+<li>用一句话说清”字典 vs 物理引擎”的区别。</li>
+<li>幻觉的真正成因是什么？为什么不能靠 prompt 防？</li>
+<li>OAG
+三层能力是什么？只有约束、没有追溯会怎样？（出了事无法审计）</li>
+<li>Harness 和本体各管什么？</li>
+</ol>
+<hr />
+<p><em>完整版见 <a
+href="https://finger999999.github.io/fde-course/课程/S1_本体论.html">FDE
+课程中心 · S1</a></em></p>
+
+<script>
+(function () {
+  var heads = Array.prototype.filter.call(document.querySelectorAll("h1, h2, h3"), function (h) { return !h.closest("#title-block-header"); });
+  if (heads.length < 3) return;
+  var nav = document.createElement("nav");
+  nav.id = "fde-toc";
+  var html = '<div class="toc-title">本页目录</div>';
+  var links = [];
+  heads.forEach(function (h, i) {
+    if (!h.id) h.id = "fde-sec-" + i;
+    var cls = "toc-" + h.tagName.toLowerCase();
+    html += '<a class="' + cls + '" href="#' + h.id + '">' + h.textContent + "</a>";
+    links.push({ a: null, h: h });
+  });
+  html += '<div class="toc-back"><a href="../index.html">← 返回学习版首页</a></div>';
+  nav.innerHTML = html;
+  document.body.appendChild(nav);
+  var as = nav.querySelectorAll("a[href^='#']");
+  as.forEach(function (a, i) { links[i].a = a; });
+  function onScroll() {
+    var cur = 0;
+    links.forEach(function (l, i) {
+      if (l.h.getBoundingClientRect().top < 120) cur = i;
+    });
+    links.forEach(function (l, i) { l.a.classList.toggle("active", i === cur); });
+  }
+  window.addEventListener("scroll", onScroll, { passive: true });
+  onScroll();
+})();
+</script>
+</body>
+</html>

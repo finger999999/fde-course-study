@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>第七课 · 原型开发</title>
+  <style>
+    html {
+      color: #1a1a1a;
+      background-color: #fdfdfd;
+    }
+    body {
+      margin: 0 auto;
+      max-width: 36em;
+      padding-left: 50px;
+      padding-right: 50px;
+      padding-top: 50px;
+      padding-bottom: 50px;
+      hyphens: auto;
+      overflow-wrap: break-word;
+      text-rendering: optimizeLegibility;
+      font-kerning: normal;
+    }
+    @media (max-width: 600px) {
+      body {
+        font-size: 0.9em;
+        padding: 12px;
+      }
+      h1 {
+        font-size: 1.8em;
+      }
+    }
+    @media print {
+      html {
+        background-color: white;
+      }
+      body {
+        background-color: transparent;
+        color: black;
+        font-size: 12pt;
+      }
+      p, h2, h3 {
+        orphans: 3;
+        widows: 3;
+      }
+      h2, h3, h4 {
+        page-break-after: avoid;
+      }
+    }
+    p {
+      margin: 1em 0;
+    }
+    a {
+      color: #1a1a1a;
+    }
+    a:visited {
+      color: #1a1a1a;
+    }
+    img {
+      max-width: 100%;
+    }
+    svg {
+      height: auto;
+      max-width: 100%;
+    }
+    h1, h2, h3, h4, h5, h6 {
+      margin-top: 1.4em;
+    }
+    h5, h6 {
+      font-size: 1em;
+      font-style: italic;
+    }
+    h6 {
+      font-weight: normal;
+    }
+    ol, ul {
+      padding-left: 1.7em;
+      margin-top: 1em;
+    }
+    li > ol, li > ul {
+      margin-top: 0;
+    }
+    blockquote {
+      margin: 1em 0 1em 1.7em;
+      padding-left: 1em;
+      border-left: 2px solid #e6e6e6;
+      color: #606060;
+    }
+    code {
+      font-family: Menlo, Monaco, Consolas, 'Lucida Console', monospace;
+      font-size: 85%;
+      margin: 0;
+      hyphens: manual;
+    }
+    pre {
+      margin: 1em 0;
+      overflow: auto;
+    }
+    pre code {
+      padding: 0;
+      overflow: visible;
+      overflow-wrap: normal;
+    }
+    .sourceCode {
+     background-color: transparent;
+     overflow: visible;
+    }
+    hr {
+      background-color: #1a1a1a;
+      border: none;
+      height: 1px;
+      margin: 1em 0;
+    }
+    table {
+      margin: 1em 0;
+      border-collapse: collapse;
+      width: 100%;
+      overflow-x: auto;
+      display: block;
+      font-variant-numeric: lining-nums tabular-nums;
+    }
+    table caption {
+      margin-bottom: 0.75em;
+    }
+    tbody {
+      margin-top: 0.5em;
+      border-top: 1px solid #1a1a1a;
+      border-bottom: 1px solid #1a1a1a;
+    }
+    th {
+      border-top: 1px solid #1a1a1a;
+      padding: 0.25em 0.5em 0.25em 0.5em;
+    }
+    td {
+      padding: 0.125em 0.5em 0.25em 0.5em;
+    }
+    header {
+      margin-bottom: 4em;
+      text-align: center;
+    }
+    #TOC li {
+      list-style: none;
+    }
+    #TOC ul {
+      padding-left: 1.3em;
+    }
+    #TOC > ul {
+      padding-left: 0;
+    }
+    #TOC a:not(:hover) {
+      text-decoration: none;
+    }
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+  </style>
+
+<style id="fde-wide-layout-patch">
+/* ===== FDE 阅读优化样式 v4 ===== */
+html { font-size: 17px; }
+body {
+  font-family: -apple-system, "Segoe UI", "PingFang SC", "Hiragino Sans GB",
+               "Microsoft YaHei", "Source Han Sans SC", "Noto Sans CJK SC", sans-serif;
+  max-width: 42em; line-height: 1.85; color: #24292f;
+  padding: 24px 20px 64px; letter-spacing: .01em;
+}
+#title-block-header { display: none; }
+p { margin: 1.1em 0; }
+ul, ol { padding-left: 1.6em; margin: 1em 0; }
+li { margin: .35em 0; }
+h1, h2, h3, h4, h5, h6 { line-height: 1.4; color: #111827; scroll-margin-top: 16px; }
+h1 { font-size: 1.75em; margin: 0 0 .6em; padding-bottom: .4em; border-bottom: 2px solid #e5e7eb; }
+h2 {
+  font-size: 1.42em; margin: 2em 0 .9em; padding: .12em 0 .12em .6em;
+  border-left: 5px solid #2563eb; border-radius: 0 6px 6px 0;
+  background: linear-gradient(to right, #eff6ff, rgba(239,246,255,0));
+}
+h3 { font-size: 1.18em; margin: 1.6em 0 .7em; color: #1f2937; }
+h4 { font-size: 1.05em; margin: 1.4em 0 .6em; color: #374151; }
+a { color: #2563eb; text-decoration: none; }
+a:hover { text-decoration: underline; }
+blockquote {
+  margin: 1.2em 0; padding: .7em 1.2em; color: #374151;
+  background: #f8fafc; border-left: 4px solid #93c5fd; border-radius: 0 8px 8px 0;
+}
+blockquote p { margin: .5em 0; }
+code {
+  font-family: "Cascadia Code", Consolas, "Courier New", monospace;
+  font-size: .87em; background: rgba(175,184,193,.25); padding: .1em .4em; border-radius: 4px;
+}
+pre {
+  background: #f6f8fa; border: 1px solid #e5e7eb; border-radius: 8px;
+  padding: 14px 16px; overflow-x: auto; line-height: 1.6; margin: 1.2em 0;
+}
+pre code { background: transparent; padding: 0; font-size: .92em; }
+table { border-collapse: collapse; width: 100% !important; margin: 1.4em 0; font-size: .94em; }
+th, td { border: 1px solid #d0d7de; padding: 8px 12px; vertical-align: top; }
+th { background: #f2f4f7; font-weight: 600; }
+tbody tr:nth-child(even) td { background: #fafbfc; }
+hr { border: none; border-top: 1px solid #e5e7eb; margin: 2.4em 0; }
+img { max-width: 100%; border-radius: 6px; }
+#fde-toc {
+  display: none; position: fixed; left: 24px; top: 32px; width: 300px;
+  max-height: calc(100vh - 64px); overflow: auto; z-index: 10;
+  font-family: "Segoe UI", "Microsoft YaHei", "PingFang SC", sans-serif;
+  font-size: 14px; line-height: 1.55;
+  background: #fff; border: 1px solid #e5e7eb; border-radius: 10px;
+  padding: 14px 18px; box-shadow: 0 2px 12px rgba(0,0,0,.06);
+}
+#fde-toc .toc-title { font-weight: 700; color: #111827; margin-bottom: 8px; }
+#fde-toc a { display: block; color: #374151; text-decoration: none; padding: 2px 0; }
+#fde-toc a:hover { color: #2563eb; }
+#fde-toc a.active { color: #2563eb; font-weight: 600; }
+#fde-toc .toc-h1 { font-weight: 700; }
+#fde-toc .toc-h2 { margin-left: 10px; }
+#fde-toc .toc-h3 { margin-left: 24px; color: #6b7280; font-size: 13px; }
+#fde-toc .toc-back { margin-top: 10px; padding-top: 8px; border-top: 1px solid #e5e7eb; }
+@media (min-width: 1100px) {
+  html { font-size: 18px; background: #eceff3; }
+  body {
+    background: #fff; border-radius: 12px; box-shadow: 0 2px 18px rgba(15,23,42,.08);
+    margin: 28px auto 56px; padding: 40px 48px 64px;
+  }
+}
+@media (min-width: 1400px) {
+  body { margin-left: max(360px, calc(50vw - 21em + 74px)); margin-right: auto; }
+  #fde-toc { display: block; }
+}
+</style>
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">第七课 · 原型开发</h1>
+</header>
+<h1 id="第七课-原型开发">第七课 · 原型开发</h1>
+<blockquote>
+<p><strong>学习版说明</strong>：让方案”看得见”，同时守住 demo
+的诚实边界。先立一条规矩：<strong>demo 跑通的是
+UI，不是模型</strong>——把外壳当成”产品跑通了”去演示，就是骗客户。本课有全课唯一一条”一票警示”红线。</p>
+</blockquote>
+<h2 id="学习目标">学习目标</h2>
+<ul class="task-list">
+<li><label><input
+type="checkbox" />说出原型三步流水线及每步的确认点</label></li>
+<li><label><input type="checkbox" />理解”TODO 占位 = Mock
+清单”，知道为什么不能删</label></li>
+<li><label><input type="checkbox" /><strong>会给自己的 demo
+做可信度三档自评（说不出在哪一档 = 路演一票警示）</strong></label></li>
+</ul>
+<h2 id="一三步流水线">一、三步流水线</h2>
+<pre><code>/studio-design:design &lt;输入&gt;
+  ① screenshot-to-pencil  → screens.pen     ⏸ 你确认
+  ② pencil-to-openspec    → openspec/       ⏸ 你确认
+  ③ openspec-to-code      → React/Next.js 代码</code></pre>
+<ul>
+<li><strong>可从任意阶段切入</strong>：给截图从①开始；给
+<code>.pen</code> 文件从②开始；给 change-id 从③开始</li>
+<li>⚠️ 建议<strong>显式指定要跑哪一步</strong>，别赌工具猜对</li>
+<li>实测澄清：<code>.pen</code> 文件其实是<strong>明文 UTF-8
+JSON</strong>，插件文档里的某些说法与本地实际文件不符——又是那句”别信文档，去看代码”</li>
+<li>设计令牌（颜色/字号等 token）是设计层的”口径单点”，和第六课 BRIEF
+的数字单点是同一个思想</li>
+</ul>
+<h2
+id="二缺信息时的兜底约定直接关系诚实边界">二、缺信息时的兜底约定（直接关系诚实边界）</h2>
+<p>工具生成代码时遇到缺的信息，会留 <strong>TODO
+注释</strong>（比如”此处应接真实接口”）。</p>
+<blockquote>
+<p><strong>这些 TODO 就是你的 Mock 清单。别删掉它们——删了 TODO
+不等于实现了功能，只等于你看不见了。</strong></p>
+</blockquote>
+<h2 id="三-demo-可信度三档本课的灵魂">三、⭐⭐ demo
+可信度三档（本课的灵魂）</h2>
+<p>你会说”我们的 demo 是 Mock”。<strong>但 Mock
+不是一档，含金量差一个量级。</strong> 对比两个真实案例：</p>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th></th>
+<th>案例 A</th>
+<th>案例 B</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>界面</td>
+<td>47 个页面</td>
+<td>11 个页面</td>
+</tr>
+<tr class="even">
+<td>AI 回答</td>
+<td>Mock（关键词路由）</td>
+<td>Mock（正则分支 + 延时假装思考）</td>
+</tr>
+<tr class="odd">
+<td><strong>数据</strong></td>
+<td><strong>真的</strong>——直接读 79 家机构的真实 CSV</td>
+<td><strong>全仿真</strong>——写死在代码里</td>
+</tr>
+<tr class="even">
+<td>分级</td>
+<td><strong>壳假 · 数据真</strong></td>
+<td><strong>壳假 · 数据也假</strong></td>
+</tr>
+</tbody>
+</table>
+<h3 id="你的三档自评">你的三档自评</h3>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>档</th>
+<th>你的 demo 是</th>
+<th>演示时必须说</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>A</strong></td>
+<td>壳真 + 数据真 + 模型真</td>
+<td>（还没人到这一档）</td>
+</tr>
+<tr class="even">
+<td><strong>B</strong></td>
+<td>壳假 + <strong>数据真</strong></td>
+<td>“界面是原型，<strong>数据是客户真实数据</strong>，AI
+回答是预设的”</td>
+</tr>
+<tr class="odd">
+<td><strong>C</strong></td>
+<td>壳假 + 数据假</td>
+<td>“这是交互外壳，<strong>数据和 AI
+回答都是演示用的</strong>，不是模型跑通”</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>说不出自己在哪一档 → 路演一票警示。</strong>
+演示规定动作：<strong>先念 Mock
+清单，再开始演</strong>。含糊带过不是撒谎，是”不说”——同样算触发。</p>
+</blockquote>
+<h2 id="四实操要点">四、实操要点</h2>
+<ul>
+<li>产出 <strong>3–6 屏原型 + 诚实说明 + Mock 清单</strong></li>
+<li>按交付模式分形态：模式一重”能用的应用”，模式二重”能过评审的演示”</li>
+<li>🔔 <strong>强烈建议做一屏”人工确认界面”</strong>（HIL
+确认屏）：能把闸画出来的方案，客户才相信你真的想过责任归属</li>
+<li>常见翻车：目录前缀要人工对齐（工具不会自动加）；spec
+文件要有规定的段落包裹；没实测过的链路要诚实标注”未实测”</li>
+</ul>
+<h2 id="五同一条纪律的第四个场景">五、同一条纪律的第四个场景</h2>
+<p>文号（第五/六课）、数字（第三课）、来源标注（第一课）、Mock
+声明（本课）——<strong>四个场景是同一句判据的四次出现</strong>：</p>
+<blockquote>
+<h1 id="空缺可以补编造无法挽回">空缺可以补，编造无法挽回。</h1>
+</blockquote>
+<p>想一想：下周你拿这个 demo
+去见客户，你会怎么说？那句诚实的”这部分是演示数据”，就是客户以后愿不愿意信你第二次的分界线。</p>
+<h2 id="自测">自测</h2>
+<ol type="1">
+<li>demo 三档各是什么？你的 demo 在哪一档？演示时必须说什么？</li>
+<li>为什么不能删代码里的 TODO？</li>
+<li>三步流水线是哪三步，各有几个确认点？</li>
+</ol>
+<hr />
+<p><em>完整版见 <a
+href="https://finger999999.github.io/fde-course/课程/L7_原型开发.html">FDE
+课程中心 · L7</a></em></p>
+
+<script>
+(function () {
+  var heads = Array.prototype.filter.call(document.querySelectorAll("h1, h2, h3"), function (h) { return !h.closest("#title-block-header"); });
+  if (heads.length < 3) return;
+  var nav = document.createElement("nav");
+  nav.id = "fde-toc";
+  var html = '<div class="toc-title">本页目录</div>';
+  var links = [];
+  heads.forEach(function (h, i) {
+    if (!h.id) h.id = "fde-sec-" + i;
+    var cls = "toc-" + h.tagName.toLowerCase();
+    html += '<a class="' + cls + '" href="#' + h.id + '">' + h.textContent + "</a>";
+    links.push({ a: null, h: h });
+  });
+  html += '<div class="toc-back"><a href="../index.html">← 返回学习版首页</a></div>';
+  nav.innerHTML = html;
+  document.body.appendChild(nav);
+  var as = nav.querySelectorAll("a[href^='#']");
+  as.forEach(function (a, i) { links[i].a = a; });
+  function onScroll() {
+    var cur = 0;
+    links.forEach(function (l, i) {
+      if (l.h.getBoundingClientRect().top < 120) cur = i;
+    });
+    links.forEach(function (l, i) { l.a.classList.toggle("active", i === cur); });
+  }
+  window.addEventListener("scroll", onScroll, { passive: true });
+  onScroll();
+})();
+</script>
+</body>
+</html>
